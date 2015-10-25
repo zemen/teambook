@@ -124,3 +124,8 @@
             dfs(v, u, ch + 1);
 +           cnt[u] += cnt[v];
         }
+
+//CF 327C
+-   if (res == INF)
++   if (res >= INF / 2)
+        res = -1; 
