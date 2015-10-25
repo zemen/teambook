@@ -65,7 +65,7 @@
 
 
 //Petrsu summer camp 2015 day1 D
-	//Segment tree
+    //Segment tree
 +   fill(upd, upd + base * 2, 0);
 
 
@@ -76,28 +76,28 @@
 
 
 //Petrsu summer camp 2015 day3 G
-	int getId(Node *t)
-	{
--		int id = 0;
-+		int id = cnt(t->l);
-		while (t->p)
-		{
-			if (t->p->r == t)
-				id += cnt(t->p->l) + 1;
-			t = t->p;
-		}
-		return id;
-	}
+    int getId(Node *t)
+    {
+-       int id = 0;
++       int id = cnt(t->l);
+        while (t->p)
+        {
+            if (t->p->r == t)
+                id += cnt(t->p->l) + 1;
+            t = t->p;
+        }
+        return id;
+    }
 
 
 //Petrsu summer camp 2015 day4 C
-	forn (i, m)
-		{
-			scanf("%d", c + i + n);
-			s.emplace(c[i + n], i + n);
--			ans[i] = -1;
+    forn (i, m)
+        {
+            scanf("%d", c + i + n);
+            s.emplace(c[i + n], i + n);
+-           ans[i] = -1;
 +           ans[i + n] = -1;
-		}
+        }
 
 
 //Petrsu summer camp 2015 day5 A
@@ -125,7 +125,26 @@
 +           cnt[u] += cnt[v];
         }
 
+
 //CF 327C
 -   if (res == INF)
 +   if (res >= INF / 2)
         res = -1; 
+
+
+//Opentrains 010026 F
+    struct E {
+        int v, c, w;
+-   } es[maxn];
++   } es[2 * maxn];
+
+
+//Opentrains 010026 H
+        fill(mask, mask + n, 0);
+-       fill(init, mask + n, ll(-1));
++       fill(init, init + n, ll(-1));
+
+
+//Opentrains 010026 H
+-       mask[v] |= (init[u] & mask[v]);
++       mask[v] |= (init[v] & mask[u]);
