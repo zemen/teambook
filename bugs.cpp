@@ -148,3 +148,9 @@
 //Opentrains 010026 H
 -       mask[v] |= (init[u] & mask[v]);
 +       mask[v] |= (init[v] & mask[u]);
+
+
+//Opentrains 001367 H
+    forn (i, n)
+-       forn (j, n)
++       forn (j, i)
