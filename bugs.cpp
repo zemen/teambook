@@ -154,3 +154,9 @@
     forn (i, n)
 -       forn (j, n)
 +       forn (j, i)
+
+ 
+//Opencup GP of Yekaterinburg
+    edge[e].f++;
+-   edge[e ^ 1].f++;
++   edge[e ^ 1].f--;
