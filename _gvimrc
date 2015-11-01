@@ -1,0 +1,21 @@
+syntax on
+set ai
+set si 
+set nu
+set expandtab
+set tabstop=4
+set shiftwidth=4
+set cinwords+=forn,forab
+
+imap jj <esc>
+map <c-j> 5j
+map <c-k> 5k
+map gc ^i//<esc>
+map gu ^xx
+
+imap {<cr> {<cr>}<esc>kA<cr>
+
+map <f9> :w<cr>:!g++ -O2 -DLOCAL -Wno-unused-result -std=c++11 -Wall -Wextra -o %< %<cr>
+map <f5> :!%<<cr>
+
+set guifont=Consolas:cRUSSIAN
