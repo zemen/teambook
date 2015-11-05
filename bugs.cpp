@@ -160,3 +160,9 @@
     edge[e].f++;
 -   edge[e ^ 1].f++;
 +   edge[e ^ 1].f--;
+
+
+//Hackerrank testing
+//Fenwick tree
+-   return get(xr, yr) + get(xl, yl) - get(xr, yl) - get(yr, xl);
++   return get(xr, yr) + get(xl, yl) - get(xr, yl) - get(xl, yr);
