@@ -166,3 +166,18 @@
 //Fenwick tree
 -   return get(xr, yr) + get(xl, yl) - get(xr, yl) - get(yr, xl);
 +   return get(xr, yr) + get(xl, yl) - get(xr, yl) - get(xl, yr);
+
+
+//Opencup GP of Siberia 4
++   cout.precision(10);
+
+
+//Opencup GP of Siberia 3
+-   if (mask[u] | (ull(1) << (j - i)))
++   if (mask[u] & (ull(1) << (j - i)))
+
+
+//Opencup GP of Siberia 6
+    return pos.x * cos(ang) + pos.y * -sin(ang)
+-          pos.x * sin(ang) + pos.x *  cos(ang);
++          pos.x * sin(ang) + pos.y *  cos(ang);
