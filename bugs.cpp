@@ -181,3 +181,15 @@
     return pos.x * cos(ang) + pos.y * -sin(ang)
 -          pos.x * sin(ang) + pos.x *  cos(ang);
 +          pos.x * sin(ang) + pos.y *  cos(ang);
+
+
+//MIPT Fall Day1 J
+ld d[1 << maxn][maxn]; // some dynamic
+...
+int dist[maxn][maxn]; // distance matrix
+...
+    forn (k, n)
+        forn (i, n)
+            forn (j, n)
+-               d[i][j] = min(d[i][j], d[i][k] + d[k][j]);
++               dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);
