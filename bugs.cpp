@@ -193,3 +193,14 @@ int dist[maxn][maxn]; // distance matrix
             forn (j, n)
 -               d[i][j] = min(d[i][j], d[i][k] + d[k][j]);
 +               dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);
+
+
+//Some task on PE
+int add(int x, int y) {
+  x += y;
+  if (x >= mod) {
+-   x -= y;
++   x -= mod;
+  }
+  return x;
+}
