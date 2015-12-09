@@ -195,6 +195,17 @@ int dist[maxn][maxn]; // distance matrix
 +               dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);
 
 
+//Some task on PE
+int add(int x, int y) {
+  x += y;
+  if (x >= mod) {
+-   x -= y;
++   x -= mod;
+  }
+  return x;
+}
+
+
 //CF 335C
 //Before building a convex hull
     sort(p, p + n, cmp);
