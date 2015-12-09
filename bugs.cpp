@@ -193,3 +193,9 @@ int dist[maxn][maxn]; // distance matrix
             forn (j, n)
 -               d[i][j] = min(d[i][j], d[i][k] + d[k][j]);
 +               dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);
+
+
+//CF 335C
+//Before building a convex hull
+    sort(p, p + n, cmp);
++   n = unique(p, p + n) - p;
