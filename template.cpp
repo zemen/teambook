@@ -6,7 +6,7 @@ using namespace std;
 #define forab(i, a, b) for (int i = int(a); i < int(b); ++i)
 
 typedef long long ll;
-typedef long long ld;
+typedef long double ld;
 
 const int INF = int(1e9) + 100;
 const ll INFL = ll(2e18) + 100;
