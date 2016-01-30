@@ -210,3 +210,12 @@ int add(int x, int y) {
 //Before building a convex hull
     sort(p, p + n, cmp);
 +   n = unique(p, p + n) - p;
+
+
+//CF WunderFund Round
+    t[v * 2] *= upd[v];
+    t[v * 2 + 1] *= upd[v];
++   upd[v * 2] *= upd[v];
++   upd[v * 2 + 1] *= upd[v];
+    upd[v] = 1;
+
