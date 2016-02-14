@@ -219,3 +219,11 @@ int add(int x, int y) {
 +   upd[v * 2 + 1] *= upd[v];
     upd[v] = 1;
 
+
+//CF 8VC Cup
+-   int ans = max(a.back(), b.back());
++   int ans = 0;
++   if (!a.empty())
++       ans = max(ans, a.back());
++   if (!b.empty())
++       ans = max(ans, b.back());
