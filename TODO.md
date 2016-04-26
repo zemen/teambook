@@ -10,7 +10,6 @@
 - lincut(разботать простой код SU4)
 
 - dinic?
-- 2-SAT
 - LR-flows
 - two chinese algorithm
 - mincost-circulation
