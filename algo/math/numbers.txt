@@ -1,0 +1,1 @@
+Simpson's numerical integration: integral from a to b f(x) dx = (b - a) / 6 * (f(a) + 4 * f((a + b) / 2) + f(b))
