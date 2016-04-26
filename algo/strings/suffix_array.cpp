@@ -1,7 +1,4 @@
-
-#include <iostream>
-#include <string>
-#include <algorithm>
+#include <bits/stdc++.h>
 using namespace std;
 #define forn(i, n) for (int i = 0; i < (int)(n); ++i)
 
@@ -51,7 +48,6 @@ void build() {
 }
 
 int main() {
-    freopen("input.txt", "r", stdin);
     cin >> s;
     s += '$';
     n = s.length();

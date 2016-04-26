@@ -1,24 +1,6 @@
-#include <iostream>
-#include <unordered_set>
-#include <set>
-#include <cstdio>
-#include <algorithm>
-#include <cassert>
-#include <cstdlib>
+#include <bits/stdc++.h>
 using namespace std;
 #define forn(i, n) for (int i = 0; i < (int)(n); ++i)
-#define fore(i, b, e) for (int i = (int)(b); i <= (int)(e); ++i)
-#define ford(i, n) for (int i = (int)(n) - 1; i >= 0; --i)
-#define mp make_pair
-#define pb push_back
-#define fi first
-#define se second
-#define all(x) (x).begin(), (x).end()
-typedef vector<int> vi;
-typedef pair<int, int> pii;
-typedef long long i64;
-typedef unsigned long long u64;
-const int inf = 1e9+100500;
 const int maxn = 100500;
 
 struct node {
@@ -85,26 +67,10 @@ node *fast_insert(node *t, int x) {
     return fast_insert(t, new node(x));
 }
 
-void print(node* t) {
-    if (t) {
-        print(t->l);
-        printf("%d ", t->x);
-        print(t->r);
-    }
-    fflush(stdout);
-}
-
 int main() {
     node *t = NULL;
-    unordered_set<int> q;
     forn(i, 1000000) {
         int x = rand();
-        q.insert(x);
-//         t = insert(t, x);
-//         t = fast_insert(t, x);
+        t = fast_insert(t, x);
     }
-
-#ifdef HOME
-    cerr << "Time elapsed: " << clock() / 1000 << " ms" << endl;
-#endif
 }

@@ -5,54 +5,23 @@
 tex_file=$(mktemp) ## Random temp file name
 
 cat<<EOF >$tex_file   ## Print the tex file header
-\documentclass{article}
-\usepackage{libertine}
-\usepackage{listings}
-\usepackage{listingsutf8}
-\usepackage[usenames,dvipsnames]{color}  %% Allow color names
-\usepackage[utf8]{inputenc}
-\usepackage[english,russian]{babel}
-\lstdefinestyle{stylevim}{
-  belowcaptionskip=1\baselineskip,
-  xleftmargin=\parindent,
-  language=C++,   %% Change this to whatever you write in
-  breaklines=true, %% Wrap long lines
-  basicstyle=\footnotesize\ttfamily,
-  stringstyle=\color{Black},
-  keywordstyle=\bfseries\color{OliveGreen},
-  identifierstyle=\color{blue},
-  xleftmargin=-8em,
-}        
-\lstdefinestyle{styletxt}{
-  belowcaptionskip=1\baselineskip,
-  xleftmargin=\parindent,
-  breaklines=true, %% Wrap long lines
-  basicstyle=\footnotesize\ttfamily,
-  stringstyle=\color{Black},
-  xleftmargin=-8em,
-  keepspaces=true,
-  extendedchars=false
-}        
-\lstdefinestyle{stylecpp}{
-  belowcaptionskip=1\baselineskip,
-  xleftmargin=\parindent,
-  language=C++,   %% Change this to whatever you write in
-  breaklines=true, %% Wrap long lines
-  basicstyle=\footnotesize\ttfamily,
-  commentstyle=\itshape\color{Gray},
-  stringstyle=\color{Black},
-  keywordstyle=\bfseries\color{OliveGreen},
-  identifierstyle=\color{blue},
-  xleftmargin=-8em,
-}        
-\usepackage[colorlinks=true,linkcolor=blue]{hyperref} 
+\documentclass[twocolumn]{article}                                               %% two-column document
+\usepackage{minted}                                                              %% color code listings
+\usepackage[utf8]{inputenc}                                                      %% UTF-8 support
+\usepackage[english,russian]{babel}                                              %% Cyrillic support
+\usepackage[colorlinks=true,linkcolor=blue]{hyperref}                            %% HTML table of contents
+\usepackage[margin=0.4in,footskip=0in]{geometry}                                 %% page bounds
+\usepackage{tocloft}                                                             %% dotted table of contents
+\renewcommand\cftsecleader{\cftdotfill{\cftdotsep}}                              %% dotted table of contents
+\renewcommand{\theFancyVerbLine}{\sffamily {\scriptsize \arabic{FancyVerbLine}}} %% numbers font size
 \begin{document}
 \tableofcontents
 
 EOF
 
-find . -type f -regex ".*\.\(cpp\|vim\|txt\)" ! -name ".*" ! -name "*~" |
-sort |
+# find . -type f -regex ".*\.\(cpp\|vim\|txt\)" ! -name ".*" ! -name "*~" |
+find . -type f -regex "./algo.*\.cpp\|.*.txt" |
+LC_ALL=C sort |
 sed 's/^\..//' |                 ## Change ./foo/bar.src to foo/bar.src
 
 while read  i; do                ## Loop through each file
@@ -63,18 +32,20 @@ while read  i; do                ## Loop through each file
 
     ## This command will include the file in the PDF
     if [[ "$i" == *.cpp ]]; then
-        echo "\lstinputlisting[style=stylecpp]{$i}" >>$tex_file
+        echo "\inputminted[linenos,breaklines,fontsize=\scriptsize]{c++}{$i}" >>$tex_file
+        # echo "\lstinputlisting[style=stylecpp]{$i}" >>$tex_file
     elif [[ "$i" == *.vim ]]; then
-        echo "\lstinputlisting[style=stylevim]{$i}" >>$tex_file
-    else
-        echo "\lstinputlisting[style=styletxt]{$i}" >>$tex_file
+        echo "\inputminted[linenos,breaklines]{vim}{$i}" >>$tex_file
+    else    
+        echo "\inputminted[breaklines]{html}{$i}" >>$tex_file
     fi
 done &&
 echo "\end{document}" >> $tex_file &&
 # cp $tex_file teambook.tex && 
-pdflatex $tex_file -output-directory . && 
-pdflatex $tex_file -output-directory .  ## This needs to be run twice 
+pdflatex -shell-escape $tex_file -output-directory . && 
+pdflatex -shell-escape $tex_file -output-directory .  ## This needs to be run twice 
                                            ## for the TOC to be generated    
 
 rm tmp.{aux,log,out,toc}
+rm -rf _minted-tmp
 mv tmp.pdf teambook.pdf

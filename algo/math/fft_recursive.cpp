@@ -116,14 +116,5 @@ void test() {
 }
 
 int main() {
-#ifdef LOCAL
-    freopen("input.txt", "r", stdin);
-#endif
-
     test();
-
-#ifdef LOCAL
-    cerr << "Time elapsed: " << clock() / 1000 << " ms" << endl;
-#endif
-    return 0;
 }

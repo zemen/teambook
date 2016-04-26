@@ -1,23 +1,7 @@
-#include <iostream>
-#include <set>
-#include <cstdio>
-#include <algorithm>
-#include <cassert>
-#include <cstdlib>
+#include <bits/stdc++.h>
 using namespace std;
 #define forn(i, n) for (int i = 0; i < (int)(n); ++i)
-#define fore(i, b, e) for (int i = (int)(b); i <= (int)(e); ++i)
-#define ford(i, n) for (int i = (int)(n) - 1; i >= 0; --i)
-#define mp make_pair
-#define pb push_back
-#define fi first
-#define se second
-#define all(x) (x).begin(), (x).end()
-typedef vector<int> vi;
-typedef pair<int, int> pii;
-typedef long long i64;
-typedef unsigned long long u64;
-const int inf = 1e9+100500;
+
 const int maxn = 100500;
 
 struct node;
@@ -116,45 +100,15 @@ node *insert(node *t, node *n) {
     return t;
 }
 
-void print(node* t) {
-    if (t) {
-        if (t->l) assert(t->l->p == t);
-        if (t->r) assert(t->r->p == t);
-        print(t->l);
-        printf("%d ", t->val);
-        print(t->r);
-    }
-    fflush(stdout);
-}
-
-void printCool(node* t, int d = 0) {
-    if (t) {
-        if (d == 0) assert(!t->p);
-        if (t->l) assert(t->l->p == t);
-        if (t->r) assert(t->r->p == t);
-        printCool(t->r, d+2);
-        cout << string(d, ' ') << t->val << endl;
-        printCool(t->l, d+2);
-    }
-}
-
 node *insert(node *t, int x) {
     return insert(t, new node(x));
 }
 
 int main() {
-#ifdef HOME
-//     freopen("input.txt", "r", stdin);
-#endif
-
     node *t = NULL;
     forn(i, 1000000) {
         int x = rand();
         t = insert(t, x);
     }
-
-#ifdef HOME
-    cerr << "Time elapsed: " << clock() / 1000 << " ms" << endl;
-#endif
     return 0;
 }
