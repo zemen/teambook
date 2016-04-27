@@ -32,7 +32,7 @@ while read  i; do                ## Loop through each file
 
     ## This command will include the file in the PDF
     if [[ "$i" == *.cpp ]]; then
-        echo "\inputminted[linenos,breaklines,fontsize=\scriptsize]{c++}{$i}" >>$tex_file
+        echo "\inputminted[numbersep=1pt,linenos,breaklines,fontsize=\scriptsize]{c++}{$i}" >>$tex_file
         # echo "\lstinputlisting[style=stylecpp]{$i}" >>$tex_file
     elif [[ "$i" == *.vim ]]; then
         echo "\inputminted[linenos,breaklines]{vim}{$i}" >>$tex_file
