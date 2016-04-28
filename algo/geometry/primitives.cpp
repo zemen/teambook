@@ -195,8 +195,3 @@ vector<pt> lineCircleIntersection(line l, pt a, ld r) {
     pt w = pt{l.a, l.b}.rot() * sqrtl(max<ld>(0, sqr(r) - sqr(d)));
     return {h + w, h - w};
 }
-
-int main() {
-    cout.precision(10);
-    cout << fixed;
-}

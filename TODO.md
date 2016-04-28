@@ -1,7 +1,7 @@
 # TODO list
 
 ### geometry
-- primitive 2d geometry(svg-painter, distances, intersections, intersections check, tangents, projections)
+- 2 circles 4 tangents
 - halfplanes intersection
 - diagonal in polygon test
 - Chan's 3d convex hull(почему авторский код не работает?)
@@ -22,3 +22,6 @@
 - gcdex?
 - Miller-Rabin test, Pollard heuristics?
 - numbers with many divisors, big primes, fibonacci numbers list, FFT numbers...
+
+### strings
+- Manacher
