@@ -13,18 +13,18 @@ struct SVG {
 
     void line(pt a, pt b) {
         a = a * sc, b = b * sc;
-        fprintf(out, "<line x1='%Lf' y1='%Lf' x2='%Lf' y2='%Lf' stroke='black'/>\n", a.x, a.y, b.x, b.y);
+        fprintf(out, "<line x1='%Lf' y1='%Lf' x2='%Lf' y2='%Lf' stroke='black'/>\n", a.x, -a.y, b.x, -b.y);
     }
 
     void circle(pt a, ld r = -1) {
         r = (r == -1 ? 10 : sc * r);
         a = a * sc;
-        fprintf(out, "<circle cx='%Lf' cy='%Lf' r='%Lf' fill='red'/>\n", a.x, a.y, r);
+        fprintf(out, "<circle cx='%Lf' cy='%Lf' r='%Lf' fill='red'/>\n", a.x, -a.y, r);
     }
 
     void text(pt a, string s) {
         a = a * sc;
-        fprintf(out, "<text x='%Lf' y='%Lf' font-size='10px'>%s</text>\n", a.x, a.y, s.c_str());
+        fprintf(out, "<text x='%Lf' y='%Lf' font-size='10px'>%s</text>\n", a.x, -a.y, s.c_str());
     }
 
     void close() {

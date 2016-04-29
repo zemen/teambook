@@ -1,7 +1,6 @@
 # TODO list
 
 ### geometry
-- 2 circles 4 tangents
 - halfplanes intersection
 - diagonal in polygon test
 - Chan's 3d convex hull(почему авторский код не работает?)

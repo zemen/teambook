@@ -164,7 +164,7 @@ vector<pt> circlesIntersction(pt a, ld r1, pt b, ld r2) {
 }
 
 //a is circle center, p is point
-vector<pt> circleTangent(pt a, ld r, pt p) {
+vector<pt> circleTangents(pt a, ld r, pt p) {
     ld d2 = (a - p).abs2();
     ld d = (a - p).abs();
 
@@ -194,4 +194,28 @@ vector<pt> lineCircleIntersection(line l, pt a, ld r) {
         return {h};
     pt w = pt{l.a, l.b}.rot() * sqrtl(max<ld>(0, sqr(r) - sqr(d)));
     return {h + w, h - w};
+}
+
+//modified magic from e-maxx
+vector<line> commonTangents(pt a, ld r1, pt b, ld r2) {
+    if (a == b && eq(r1, r2)) {
+        //equal circles
+        return {};
+    }
+    vector<line> res;
+    pt c = b - a;
+    ld z = c.abs2();
+    for (int i = -1; i <= 1; i += 2)
+        for (int j = -1; j <= 1; j += 2) {
+            ld r = r2 * j - r1 * i;
+            ld d = z - sqr(r);
+            if (lt(d, 0))
+                continue;
+            d = sqrtl(max<ld>(0, d));
+            pt magic = pt{r, d} / z;
+            line l(magic * c, magic % c, r1 * i);
+            l.c -= pt{l.a, l.b} * a;
+            res.push_back(l);
+        }
+    return res;
 }
