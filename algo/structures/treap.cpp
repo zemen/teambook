@@ -2,7 +2,7 @@
 using namespace std;
 #define forn(i, n) for (int i = 0; i < (int)(n); ++i)
 const int maxn = 100500;
-
+//BEGIN_CODE
 struct node {
     int x, y;
     node *l, *r;

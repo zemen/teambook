@@ -4,9 +4,11 @@ using namespace std;
 
 const int maxn = 100500;
 
+//BEGIN_CODE
 string s;
 int n;
-int sa[maxn], new_sa[maxn], cls[maxn], new_cls[maxn], cnt[maxn], lcp[maxn];
+int sa[maxn], new_sa[maxn], cls[maxn], new_cls[maxn],
+        cnt[maxn], lcp[maxn];
 int n_cls;
 
 void build() {
@@ -21,12 +23,13 @@ void build() {
         forn(i, n_cls) cnt[i] = 0;
         forn(i, n) ++cnt[cls[i]];
         forn(i, n_cls) cnt[i+1] += cnt[i];
-        for (int i = n-1; i >= 0; --i) sa[--cnt[cls[new_sa[i]]]] = new_sa[i];
+        for (int i = n-1; i >= 0; --i)
+            sa[--cnt[cls[new_sa[i]]]] = new_sa[i];
 
         n_cls = 0;
         forn(i, n) {
             if (i && (cls[sa[i]] != cls[sa[i-1]] ||
-                        cls[(sa[i] + d) % n] != cls[(sa[i-1] + d) % n])) {
+                    cls[(sa[i] + d) % n] != cls[(sa[i-1] + d) % n])) {
                 ++n_cls;
             }
             new_cls[sa[i]] = n_cls;
@@ -35,14 +38,15 @@ void build() {
         forn(i, n) cls[i] = new_cls[i];
     }
 
-    // cls is also a reverse permutation of sa if a string is not cyclic
+    // cls is also a inv permutation of sa if a string is not cyclic
     // (i.e. a position of i-th lexicographical suffix)
     int val = 0;
     forn(i, n) {
         if (val) --val;
         if (cls[i] == n-1) continue;
         int j = sa[cls[i] + 1];
-        while (i + val != n && j + val != n && s[i+val] == s[j+val]) ++val;
+        while (i + val != n && j + val != n && s[i+val] == s[j+val])
+            ++val;
         lcp[cls[i]] = val;
     }
 }

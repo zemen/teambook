@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 #define forn(i,n) for (int i = 0; i < int(n); ++i)
+//BEGIN_CODE
 const int maxn = 200100; //2 x number of variables
 
 namespace TwoSAT {

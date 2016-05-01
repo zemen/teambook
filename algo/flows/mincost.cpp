@@ -2,7 +2,8 @@
 using namespace std;
 typedef long long ll;
 #define forn(i,n) for (int i = 0; i < int(n); ++i)
-    
+
+//BEGIN_CODE
 namespace MinCost {
     const ll infc = 1e12;
 

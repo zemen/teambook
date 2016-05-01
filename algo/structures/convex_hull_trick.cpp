@@ -5,7 +5,7 @@ typedef long long ll;
 const ll infl = ll(2e18) + ll(2e15);
 
 const int maxn = 4004;
-
+//BEGIN_CODE
 /*
     WARNING!!!
     - finds maximum of A*x+B

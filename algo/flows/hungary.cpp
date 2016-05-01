@@ -3,6 +3,7 @@ using namespace std;
 #define forn(i,n) for (int i = 0; i < int(n); ++i)
 const int inf = 1e9 + 1e5;
 
+//BEGIN_CODE
 // left half is the smaller one
 namespace Hungary {
     const int maxn = 505;
@@ -80,6 +81,7 @@ namespace Hungary {
         return -p[1][m];
     }
 };
+//END_CODE
 
 int main() {
     int n = 300, m = 500;

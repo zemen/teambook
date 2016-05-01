@@ -5,6 +5,7 @@ using namespace std;
 
 const int maxn = 100500;
 
+//BEGIN_CODE
 int t[maxn][26], lnk[maxn], len[maxn];
 int sz;
 int last;

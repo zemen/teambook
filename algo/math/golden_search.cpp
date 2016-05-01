@@ -2,6 +2,7 @@
 typedef long double ld;
 #define forn(i, n) for (int i = 0; i < int(n); ++i)
 
+//BEGIN_CODE
 ld f(ld x) {
     return 5 * x * x + 100 * x + 1; //-10 is minimum
 }

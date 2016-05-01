@@ -1,3 +1,4 @@
+// NO_TEAMBOOK
 #include <bits/stdc++.h>
 using namespace std;
 #define forn(i, n) for (int i = 0; i < (int)(n); ++i)
@@ -21,7 +22,6 @@ struct base {
     }
 };
 
-//BEGIN_CODE
 const int sz = 1<<20;
 
 int revb[sz];
@@ -90,16 +90,31 @@ base a[maxn];
 base b[maxn];
 
 void test() {
-    int n = 8;
-    init(n);
-    base a[8] = {1,3,5,2,4,6,7,1};
-    fft(a, n, 0);
-    forn(i, n) cout << a[i].re << " "; cout << endl;
-    forn(i, n) cout << a[i].im << " "; cout << endl;
-    // 29 -5.82843 -7 -0.171573 5 -0.171573 -7 -5.82843
-    // 0 -3.41421 6 0.585786 0 -0.585786 -6 3.41421
+    int n = 1<<19;
+    mt19937 rr(55);
+    forn(i, n) a[i] = rr() % 10000;
+    forn(j, n) b[j] = rr() % 10000;
+
+    int N = 1;
+    while (N < 2*n) N *= 2;
+
+    clock_t start = clock();
+    init(N);
+    cerr << "init time: " << (clock()-start) / 1000 << " ms" << endl;
+    fft(a, N, 0);
+    fft(b, N, 0);
+    forn(i, N) a[i] = a[i] * b[i];
+    fft(a, N, 1);
+    clock_t end = clock();
+
+    ld err = 0;
+    forn(i, N) {
+        err = max(err, (ld)fabsl(a[i].im));
+        err = max(err, (ld)fabsl(a[i].re - (i64(a[i].re + 0.5))));
+    }
+
+    cerr << "Time: " << (end - start) / 1000 << " ms, err = " << err << endl;
 }
-//END_CODE
 
 int main() {
     test();
