@@ -17,10 +17,12 @@
 
 ### graphs
 - two chinese algorithm
+- min average weight cycle in O(nm)
 
 ### math
 - gcdex?
 - Miller-Rabin test, Pollard heuristics?
+- первые n обратных по модулю, phi(n) для первых n
 - numbers with many divisors, ...
 
 ### strings
