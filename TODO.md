@@ -9,12 +9,11 @@
 - lincut(разботать простой код SU4)
 
 ### flows
-- dinic
 - LR-flows
 - mincost-circulation(with min average weight cycle in O(nm))
 
 ### graphs
-- two chinese algorithm
+- two chinese algorithm (done, need testing)
 
 ### math
 - gcdex?
