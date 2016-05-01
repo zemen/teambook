@@ -3,7 +3,7 @@
 ### geometry
 - halfplanes intersection
 - diagonal in polygon test
-- Chan's 3d convex hull(почему авторский код не работает?)
+- Chan's 3d convex hull(почему авторский код не работает?)'
 - most-distant point of the polygon
 
 ### structures
@@ -24,6 +24,9 @@
 - Miller-Rabin test, Pollard heuristics?
 - первые n обратных по модулю, phi(n) для первых n
 - numbers with many divisors, ...
+- количество простых до n (заботать код Рената)
 
 ### strings
 - Manacher
+- pi, z
+- duval
