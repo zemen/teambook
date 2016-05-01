@@ -4,6 +4,7 @@
 - diagonal in polygon test
 - Chan's 3d convex hull(почему авторский код не работает?)
 - most-distant point of the polygon
+- выделение граней планарного графа
 
 ### structures
 - lincut(разботать простой код SU4)
