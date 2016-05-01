@@ -12,11 +12,11 @@ bool lt(ld a, ld b) { return b - a > eps; }
 bool gt(ld a, ld b) { return a - b > eps; }
 ld sqr(ld x) { return x * x; }
 
-inline void gassert(bool expr) {
 #ifdef LOCAL
-    assert(expr);
+#define gassert assert
+#else
+void gassert(bool) {}
 #endif
-}
 
 struct pt {
     ld x, y;
@@ -50,6 +50,7 @@ ostream &operator<<(ostream &out, const pt &p) { return out << p.x << ' ' << p.y
 //WARNING! do not forget to normalize vector (a,b)
 struct line {
     ld a, b, c;
+    int id;
 
     line(pt p1, pt p2) {
         gassert(p1 != p2);
@@ -57,6 +58,10 @@ struct line {
         n /= n.abs();
         a = n.x, b = n.y;
         c = -(n * p1);
+    }
+
+    bool right() const {
+        return gt(a, 0) || (eq(a, 0) && gt(b, 0));
     }
 
     line(ld _a, ld _b, ld _c): a(_a), b(_b), c(_c) {
@@ -89,8 +94,8 @@ pt linesIntersection(line l1, line l2) {
     ld dx = -l1.c * l2.b + l1.b * l2.c;
     ld dy = -l1.a * l2.c + l1.c * l2.a;
     pt res{dx / D, dy / D};
-    gassert(eq(l1.signedDist(res), 0));
-    gassert(eq(l2.signedDist(res), 0));
+    //gassert(eq(l1.signedDist(res), 0));
+    //gassert(eq(l2.signedDist(res), 0));
     return res;
 }
 
