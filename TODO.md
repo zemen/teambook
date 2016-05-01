@@ -21,7 +21,7 @@
 ### math
 - gcdex?
 - Miller-Rabin test, Pollard heuristics?
-- numbers with many divisors, big primes, fibonacci numbers list, FFT numbers...
+- numbers with many divisors, ...
 
 ### strings
 - Manacher

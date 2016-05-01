@@ -1,1 +1,28 @@
-Simpson's numerical integration: integral from a to b f(x) dx = (b - a) / 6 * (f(a) + 4 * f((a + b) / 2) + f(b))
+Simpson's numerical integration:
+integral from a to b f(x) dx =
+(b - a) / 6 * (f(a) + 4 * f((a + b) / 2) + f(b))
+
+Gauss 5-th order numerical integration:
+integral from -1 to 1
+x1, x3 = +-sqrt(0.6), x2 = 0
+a1, a3 = 5/9, a2 = 8/9
+
+large primes: 10^18 +3, +31, +3111
+
+fft modules for 2**20:
+7340033 13631489 26214401 28311553 70254593
+976224257 (largest less 10**9)
+
+fibonacci numbers:
+1, 2: 1
+46: 1836311903 (max int)
+47: 2971215073 (max unsigned)
+92: 7540113804746346429 (max i64)
+93: 12200160415121876738 (max unsigned i64)
+
+2**31 = 2147483648 = 2.1e9
+2**32 = 4294967296 = 4.2e9
+2**63 = 9223372036854775808 = 9.2e18
+2**64 = 18446744073709551616 = 1.8e19
+
+highly composite: todo
