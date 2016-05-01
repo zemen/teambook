@@ -16,6 +16,7 @@
 ### graphs
 - two chinese algorithm (done, need testing)
 - edmonds algorithm for maximum matching ???
+- euler path
 
 ### math
 - gcdex?
