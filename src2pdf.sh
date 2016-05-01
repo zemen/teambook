@@ -3,7 +3,7 @@
 # Origin: http://superuser.com/questions/601198/how-can-i-automatically-convert-all-source-code-files-in-a-folder-recursively
 
 # tex_file=$(mktemp) ## Random temp file name
-tex_file=teambook.tex ## Random temp file name
+tex_file=teambook.tex ## Not random temp file name
 
 cat<<EOF >$tex_file   ## Print the tex file header
 \documentclass[twocolumn,a4paper]{article}                                       %% two-column document
@@ -69,7 +69,7 @@ pdflatex -shell-escape $tex_file -output-directory . &&
 pdflatex -shell-escape $tex_file -output-directory .  ## This needs to be run twice 
                                            ## for the TOC to be generated    
 
-rm -f tmp.{aux,log,out,toc}
+rm -f teambook.{aux,log,out,toc}
+rm teambook.tex
 rm -rf $processed_code_dir
-rm -rf _minted-tmp
-mv tmp.pdf teambook.pdf
+rm -rf _minted-teambook

@@ -3,21 +3,19 @@
 ### geometry
 - halfplanes intersection
 - diagonal in polygon test
-- Chan's 3d convex hull(почему авторский код не работает?)'
+- Chan's 3d convex hull(почему авторский код не работает?)
 - most-distant point of the polygon
 
 ### structures
-- heavy-light
 - lincut(разботать простой код SU4)
 
 ### flows
-- dinic?
+- dinic
 - LR-flows
-- mincost-circulation
+- mincost-circulation(with min average weight cycle in O(nm))
 
 ### graphs
 - two chinese algorithm
-- min average weight cycle in O(nm)
 
 ### math
 - gcdex?
@@ -28,5 +26,4 @@
 
 ### strings
 - Manacher
-- pi, z
 - duval
