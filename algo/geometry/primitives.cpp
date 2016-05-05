@@ -39,6 +39,8 @@ struct pt {
     bool operator==(const pt &p) const { return eq(x, p.x) && eq(y, p.y); }
     bool operator!=(const pt &p) const { return !(*this == p); }
 
+    bool right() const { return pt{0, 0} < *this; }
+
     pt rot() { return pt{-y, x}; }
     ld abs() const { return hypotl(x, y); }
     ld abs2() const { return x * x + y * y; }

@@ -3,11 +3,10 @@
 ### geometry
 - diagonal in polygon test
 - Chan's 3d convex hull(почему авторский код не работает?)
-- most-distant point of the polygon
+- most-distant point of the polygon(done, need testing)
 - выделение граней планарного графа
 
 ### structures
-- lincut(разботать простой код SU4)
 
 ### flows
 - LR-flows
@@ -16,7 +15,7 @@
 ### graphs
 - two chinese algorithm (done, need testing)
 - edmonds algorithm for maximum matching ???
-- euler path
+- euler path(done, need testing)
 
 ### math
 - gcdex?
