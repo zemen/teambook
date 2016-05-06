@@ -69,7 +69,7 @@ vector<pt> halfplanesIntersecion(vector<line> lines) {
     }
     center = center / n;
     for (auto l: lines)
-        if (lt(l.signedDist(center), 0)) {
+        if (gt(0, l.signedDist(center))) {
             //empty intersection
             return {};
         }

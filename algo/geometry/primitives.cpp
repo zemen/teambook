@@ -6,9 +6,7 @@ typedef long double ld;
 const ld eps = 1e-9;
 
 bool eq(ld a, ld b) { return fabsl(a - b) < eps; }
-bool le(ld a, ld b) { return b - a > -eps; }
 bool ge(ld a, ld b) { return a - b > -eps; }
-bool lt(ld a, ld b) { return b - a > eps; }
 bool gt(ld a, ld b) { return a - b > eps; }
 ld sqr(ld x) { return x * x; }
 
@@ -32,7 +30,7 @@ struct pt {
     void operator/=(const ld &a) { gassert(!eq(a, 0)); x /= a, y /= a; }
 
     bool operator<(const pt &p) const {
-        if (eq(x, p.x)) return lt(y, p.y);
+        if (eq(x, p.x)) return gt(p.y, y);
         return x < p.x;
     }
 
@@ -104,7 +102,7 @@ pt linesIntersection(line l1, line l2) {
 bool pointInsideSegment(pt p, pt a, pt b) {
     if (!eq((p - a) % (p - b), 0))
         return false;
-    return le((a - p) * (b - p), 0);
+    return ge(0, (a - p) * (b - p));
 }
 
 bool checkSegmentIntersection(pt a, pt b, pt c, pt d) {
@@ -123,7 +121,7 @@ bool checkSegmentIntersection(pt a, pt b, pt c, pt d) {
     s2 = (d - a) % (b - a);
     if (gt(s1, 0) && gt(s2, 0))
         return false;
-    if (lt(s1, 0) && lt(s2, 0))
+    if (gt(0, s1) && gt(0, s2))
         return false;
 
     swap(a, c), swap(b, d);
@@ -132,7 +130,7 @@ bool checkSegmentIntersection(pt a, pt b, pt c, pt d) {
     s2 = (d - a) % (b - a);
     if (gt(s1, 0) && gt(s2, 0))
         return false;
-    if (lt(s1, 0) && lt(s2, 0))
+    if (gt(0, s1) && gt(0, s2))
         return false;
 
     return true;
@@ -152,7 +150,7 @@ vector<pt> circlesIntersction(pt a, ld r1, pt b, ld r2) {
     if (a == b && eq(r1, r2)) {
         //equal circles
     }
-    if (lt(sqr(r1 + r2), d2) || gt(sqr(r1 - r2), d2)) {
+    if (gt(d2, sqr(r1 + r2)) || gt(sqr(r1 - r2), d2)) {
         //empty intersection
         return {};
     }
@@ -216,7 +214,7 @@ vector<line> commonTangents(pt a, ld r1, pt b, ld r2) {
         for (int j = -1; j <= 1; j += 2) {
             ld r = r2 * j - r1 * i;
             ld d = z - sqr(r);
-            if (lt(d, 0))
+            if (gt(0, d))
                 continue;
             d = sqrtl(max<ld>(0, d));
             pt magic = pt{r, d} / z;
