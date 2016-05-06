@@ -1,0 +1,63 @@
+%\def\myhoffset{-25mm} 
+\def\myhoffset{-15mm} 
+\def\myvoffset{-30mm}
+\hoffset=\myhoffset
+\voffset=\myvoffset
+\documentclass[a4paper,oneside,twocolumn]{article}
+\renewcommand\textheight{252mm}
+\renewcommand\textwidth{175mm}
+\vsize=\textheight
+\hsize=\textwidth
+\usepackage[T2A]{fontenc}
+%\usepackage[utf8]{inputenc}
+%\usepackage[english,russian]{babel}
+%\usepackage[english]{babel}
+\usepackage[russian]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{olymp}
+\usepackage{color}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{chngcntr}
+\usepackage{newclude}
+\usepackage{epsfig}
+%\pagestyle{empty}
+%\def\bf{\usefont{T2A}{lcmss}{b}{n}\fontsize{12}{14.4}\selectfont}
+%\def\bigbf{\fontseries{b}\fontshape{n}\fontsize{17.28}{20.736}\selectfont}
+%\def\rm{\fontseries{m}\fontshape{n}\fontsize{12}{14.4}\selectfont}
+%\def\tt{\fontfamily{cmtt}\fontseries{m}\fontsize{12}{14.4}\selectfont}
+%\def\tt{\usefont{T2A}{lcmss}{m}{n}\fontsize{12}{14.4}\selectfont}
+%\def\zerorm{\fontseries{m}\fontshape{n}\fontsize{5}{0}\selectfont}
+%\def\rmseven{\fontseries{m}\fontshape{n}\fontsize{7}{9}\selectfont}
+%\def\rn{\fontseries{b}\fontshape{it}\fontsize{12}{14.4}\selectfont}
+%\def\rb{\fontseries{b}\fontshape{n}\fontsize{12}{14.4}\selectfont}
+%\def\vb{\fontseries{b}\fontshape{n}\fontsize{35.83}{32}\selectfont}
+%\def\vbi{\fontseries{m}\fontshape{it}\fontsize{35.83}{32}\selectfont}
+%\def\rd{\fontseries{m}\fontshape{n}\fontsize{17.28}{20.74}\selectfont}
+%\def\bd{\fontseries{b}\fontshape{n}\fontsize{17.28}{20.74}\selectfont}
+%\def\it{\fontshape{it}\selectfont}
+%\def\vs{\fontseries{b}\fontshape{n}\fontsize{1}{2}\selectfont}
+
+\makeindex
+
+\newcommand{\nosection}[1]{%
+  \refstepcounter{section}%
+  \addcontentsline{toc}{section}{\protect\numberline{\thesection}#1}%
+  \markright{#1}}
+
+\newcommand{\nosubsection}[1]{%
+  \refstepcounter{subsection}%
+  \addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}#1}%
+  \markright{#1}}
+
+
+\begin{document}
+\vsize=\textheight
+\hsize=\textwidth
+\hoffset=\myhoffset
+\voffset=\myvoffset
+
+%\fontsize{10}{8}\selectfont
+\input tex/all.tex
+
+\end{document}

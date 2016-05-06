@@ -1,0 +1,64 @@
+\subsection{Vimrc}
+\begin{verbatim}
+
+huic
+
+runtime! debian.vim
+if has("syntax")
+  syntax on
+endif
+
+set number
+set autoindent
+set expandtab
+set ci pi sts=0 sw=4 ts=4
+set incsearch
+
+au BufNewFile *.cpp 0r ~/.vim/skel.cpp | 45
+
+filetype plugin indent on
+
+autocmd FileType python set makeprg=python3\ %
+autocmd FileType cpp set makeprg=g++\ %\ -o\ %:r\ -std=c++11\ -O2\ -g\ -DLOCAL
+
+func WarningMake()
+    if &filetype == 'cpp'
+        let oldprg = &g:makeprg
+        set makeprg=g++\ %\ -o\%:r\ -Wall\ -Wextra\ -pedantic\ -std=c++11\ -O2\ -Wshadow\ -Wformat=2\
+        -Wfloat-equal\ -Wconversion\ -Wlogical-op\ -Wcast-qual\ -Wcast-align\ -D_GLIBCXX_DEBUG\
+        -D_GLIBCXX_DEBUG_PEDANTIC\ -fsanitize=address\ -fstack-protector\ -lmcheck\ -D_FORTIFY_SOURCE=2
+        w
+        silent make
+        redraw!
+        let &g:makeprg = oldprg
+        if len(getqflist()) == 0
+            ccl
+        else
+            copen
+        endif
+    endif
+endfunc
+
+func FastMake()
+    w
+    make
+    if &filetype == 'cpp'
+        if len(getqflist()) == 0
+            ccl
+            !./%:r
+        else
+            copen
+        endif
+    endif
+endfunc
+
+map <F4> :call WarningMake()<CR>
+autocmd FileType python map <F5> :w<CR>:make<CR>
+autocmd Filetype cpp map <F5> :call FastMake()<CR> 
+map <F6> :!./%:r<CR>
+map <C-Up> :cp<CR>
+map <C-Down> :cn<CR>
+
+map <F1> <Esc>
+imap <F1> <Esc>
+\end{verbatim}

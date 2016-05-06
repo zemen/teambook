@@ -1,0 +1,39 @@
+%
+% Macros for the contest problems
+% for MikTeX: use latex.exe
+% (C) Dmitry S. Lomov (SPb SU Training Centre), 2001-2002
+% (C) Kitten Computing [Andrew Lopatin & Nick Durov], 2001-2002,2003
+% (C) Andrew Stankevich (SPb IFMO Training Center), 2003,2004
+%
+%
+% This is work in progress, please do not try to modify it.
+% 
+% Visit http://neerc.ifmo.ru/develop/olymp-sty/index.html for
+% project details.
+%
+
+\ProvidesPackage{olymp}
+\def\lastpage@putlabel{\addtocounter{page}{-1}%
+   \immediate\write\@auxout{\string\newlabel{LastPage}{{}{\thepage}}}%
+   \addtocounter{page}{1}}
+\AtEndDocument{\clearpage\lastpage@putlabel}%
+%\newcommand{\curfile}{nothing}
+\renewcommand{\@oddhead}{
+    \parbox{\textwidth}{
+St.~Petersburg State University, SPb SU is a ball. {\hfil Team reference document, year 2015. Page \thepage~of~\pageref{LastPage}}
+    }
+}
+\renewcommand{\@oddfoot}{
+    \parbox{\textwidth}{
+    }
+}
+
+\makeatother
+ 
+\headheight=2cm
+\headsep=6mm
+
+\hfuzz=0.5pt
+
+\sloppy
+
