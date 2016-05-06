@@ -31,6 +31,7 @@ struct SVG {
     void close() {
         fprintf(out, "</svg>\n");
         fclose(out);
+        out = 0;
     }
 
     ~SVG() {

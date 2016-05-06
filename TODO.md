@@ -1,7 +1,6 @@
 # TODO list
 
 ### geometry
-+ diagonal in polygon test
 - Chan's 3d convex hull(почему авторский код не работает?)
 + most-distant point of the polygon
 - выделение граней планарного графа
@@ -9,7 +8,6 @@
 ### structures
 
 ### flows
-+ LR-flows
 - mincost-circulation(with min average weight cycle in O(nm))
 
 ### graphs
