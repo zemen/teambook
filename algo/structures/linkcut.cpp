@@ -16,7 +16,7 @@ typedef struct _node {
         l = r = p = pp = this;
         size = rev = 0;
     }
-    
+
     void push() {
         if (rev) {
             l->rev ^= 1; r->rev ^= 1;
@@ -47,7 +47,7 @@ void rotate(node v) {
     node u = v->p;
     if (v == u->l)
         u->l = v->r, v->r = u;
-    else 
+    else
         u->r = v->l, v->l = u;
     swap(u->p,v->p);
     swap(v->pp,u->pp);
@@ -70,7 +70,7 @@ void bigRotate(node v) {
     if (v->p->p != None) {
         if ((v->p->l == v) ^ (v->p->p->r == v->p))
             rotate(v->p);
-        else 
+        else
             rotate(v);
     }
     rotate(v);

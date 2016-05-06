@@ -1,0 +1,14 @@
+\documentclass[twocolumn,a4paper]{article}                                       %% two-column document
+\usepackage{minted}                                                              %% color code listings
+\usepackage[utf8]{inputenc}                                                      %% UTF-8 support
+\usepackage[english,russian]{babel}                                              %% Cyrillic support
+\usepackage[colorlinks=true,linkcolor=blue]{hyperref}                            %% HTML table of contents
+\usepackage[margin=0.4in,footskip=0in]{geometry}                                 %% page bounds
+\usepackage{tocloft}                                                             %% dotted table of contents
+\usepackage{graphicx}                                                            %% ps graphics
+\usepackage{teamname}
+\renewcommand\cftsecleader{\cftdotfill{\cftdotsep}}                              %% dotted table of contents
+\renewcommand{\theFancyVerbLine}{\sffamily {\scriptsize \arabic{FancyVerbLine}}} %% numbers font size
+\begin{document}
+\fontsize{9}{11}\selectfont
+\tableofcontents

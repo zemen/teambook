@@ -5,29 +5,22 @@
 # tex_file=$(mktemp) ## Random temp file name
 tex_file=teambook.tex ## Not random temp file name
 
-cat<<EOF >$tex_file   ## Print the tex file header
-\documentclass[twocolumn,a4paper]{article}                                       %% two-column document
-\usepackage{minted}                                                              %% color code listings
-\usepackage[utf8]{inputenc}                                                      %% UTF-8 support
-\usepackage[english,russian]{babel}                                              %% Cyrillic support
-\usepackage[colorlinks=true,linkcolor=blue]{hyperref}                            %% HTML table of contents
-\usepackage[margin=0.4in,footskip=0in]{geometry}                                 %% page bounds
-\usepackage{tocloft}                                                             %% dotted table of contents
-\renewcommand\cftsecleader{\cftdotfill{\cftdotsep}}                              %% dotted table of contents
-\renewcommand{\theFancyVerbLine}{\sffamily {\scriptsize \arabic{FancyVerbLine}}} %% numbers font size
-\begin{document}
-\tableofcontents
+CODE_FONT="7.9 8.5"
+TEXT_FONT="10 12"
 
-EOF
+renew_font() {
+    echo  "\fontsize{$1}{$2}\selectfont"
+}
 
 truncate_script='\
-/END_CODE/ { code = 0 } ;\
+/END.CODE/ { code = 0 } ;\
 { if (code) print $0 } ;\
-/BEGIN_CODE/ { code = 1 };'
+/BEGIN.CODE/ { code = 1 };'
 
 processed_code_dir=$(mktemp -d -p $(pwd))
 
-# find . -type f -regex ".*\.\(cpp\|vim\|txt\)" ! -name ".*" ! -name "*~" |
+cat tex_header.tex >$tex_file
+
 find . -type f -regex "./algo.*\.cpp\|.*.txt" |
 LC_ALL=C sort |
 sed 's/^\..//' |                 ## Change ./foo/bar.src to foo/bar.src
@@ -35,11 +28,11 @@ sed 's/^\..//' |                 ## Change ./foo/bar.src to foo/bar.src
 while read filename; do                ## Loop through each file
     echo "FOUND DOCUMENT $filename"
 
-    if grep -q 'NO_TEAMBOOK' $filename; then
+    if grep -q 'NO.TEAMBOOK' $filename; then
         continue
     fi
 
-    if grep -q 'BEGIN_CODE' $filename; then
+    if grep -q 'BEGIN.CODE' $filename; then
         src=$(mktemp -p $processed_code_dir)
         cat $filename | awk "$truncate_script" >$src
     else
@@ -55,21 +48,23 @@ while read filename; do                ## Loop through each file
 
     ## This command will include the file in the PDF
     if [[ "$filename" == *.cpp ]]; then
-        echo "\inputminted[numbersep=1pt,linenos,breaklines,fontsize=\scriptsize]{c++}{$src}" >>$tex_file
-        # echo "\lstinputlisting[style=stylecpp]{$filename}" >>$tex_file
+        echo $(renew_font $CODE_FONT) >>$tex_file
+        echo "\inputminted[numbersep=1pt,linenos,breaklines]{c++}{$src}" >>$tex_file
     elif [[ "$filename" == *.vim ]]; then
         echo "\inputminted[linenos,breaklines]{vim}{$src}" >>$tex_file
     else    
+        echo $(renew_font $TEXT_FONT) >>$tex_file
         echo "\inputminted[breaklines]{html}{$src}" >>$tex_file
     fi
 done &&
+
+echo "\label{LastPage}" >> $tex_file &&
 echo "\end{document}" >> $tex_file &&
 # cp $tex_file teambook.tex && 
 pdflatex -shell-escape $tex_file -output-directory . && 
 pdflatex -shell-escape $tex_file -output-directory .  ## This needs to be run twice 
-                                           ## for the TOC to be generated    
 
-rm -f teambook.{aux,log,out,toc}
+rm -f teambook.{fls,aux,log,out,toc,dvi}
 rm teambook.tex
 rm -rf $processed_code_dir
 rm -rf _minted-teambook

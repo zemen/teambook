@@ -1,9 +1,11 @@
+// NO TEAMBOOK
 #include <bits/stdc++.h>
 using namespace std;
 #define forn(i, n) for (int i = 0; i < (int)(n); ++i)
 
 const int maxn = 100500;
 
+//BEGIN_CODE
 struct node;
 void updson(node* p, node* v, node* was);
 
@@ -103,6 +105,7 @@ node *insert(node *t, node *n) {
 node *insert(node *t, int x) {
     return insert(t, new node(x));
 }
+//END_CODE
 
 int main() {
     node *t = NULL;
