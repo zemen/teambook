@@ -23,5 +23,5 @@
 - количество простых до n (заботать код Рената)
 
 ### strings
-- Manacher
-- duval
++ Manacher
++ duval
