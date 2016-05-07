@@ -1,4 +1,3 @@
-//NO_TEAMBOOK
 #include <bits/stdc++.h>
 using namespace std;
 #define forn(i, n) for (int i = 0; i < (int)(n); ++i)
@@ -23,29 +22,19 @@ struct base {
 };
 
 //BEGIN_CODE
-const int sz = 1<<20;
+const int maxlg = 20;
 
-int revb[sz];
-vector<base> ang[21];
+vector<base> ang[maxlg + 5];
 
-void init(int n) {
-    int lg = 0;
-    while ((1<<lg) != n) {
-        ++lg;
-    }
+void init_fft() {
+    int n = 1 << maxlg;
+    ld e = acosl(-1) * 2 / n;
+    ang[maxlg].resize(n);
     forn(i, n) {
-        revb[i] = (revb[i>>1]>>1)^((i&1)<<(lg-1));
-        cerr << revb[i] << ' ';
-    }
-    cerr << '\n';
-
-    ld e = M_PI * 2 / n;
-    ang[lg].resize(n);
-    forn(i, n) {
-        ang[lg][i] = { cos(e * i), sin(e * i) };
+        ang[maxlg][i] = { cos(e * i), sin(e * i) };
     }
 
-    for (int k = lg - 1; k >= 0; --k) {
+    for (int k = maxlg - 1; k >= 0; --k) {
         ang[k].resize(1 << k);
         forn(i, 1<<k) {
             ang[k][i] = ang[k+1][i*2];
@@ -63,7 +52,9 @@ void fft_rec(base *a, int lg, bool rev) {
 
     forn(i, len) {
         base w = ang[lg][i];
-        if (rev) w.im *= -1;
+        if (rev) {
+            w.im *= -1;
+        }
         base u = a[i];
         base v = a[i+len] * w;
         a[i] = u + v;
@@ -71,14 +62,18 @@ void fft_rec(base *a, int lg, bool rev) {
     }
 }
 
+//n must be power of 2
 void fft(base *a, int n, bool rev) {
-    forn(i, n) {
-        int j = revb[i];
-        if (i < j) swap(a[i], a[j]);
-    }
     int lg = 0;
     while ((1<<lg) != n) {
         ++lg;
+    }
+    int j = 0, bit;
+    for (int i = 1; i < n; ++i) {
+        for (bit = n >> 1; bit & j; bit >>= 1)
+            j ^= bit;
+        j ^= bit;
+        if (i < j) swap(a[i], a[j]);
     }
     fft_rec(a, lg, rev);
     if (rev) forn(i, n) {
@@ -94,8 +89,10 @@ base b[maxn];
 
 void test() {
     int n = 8;
-    init(n);
+    init_fft();
     base a[8] = {1,3,5,2,4,6,7,1};
+    base b[16];
+    fft(b, 16, 0);
     fft(a, n, 0);
     forn(i, n) cout << a[i].re << " "; cout << endl;
     forn(i, n) cout << a[i].im << " "; cout << endl;
