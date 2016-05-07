@@ -8,7 +8,8 @@
 ### structures
 
 ### flows
-- mincost-circulation(with min average weight cycle in O(nm))
++ mincost-circulation(with min average weight cycle in O(nm))
+- Saratov Gomori-Hu tree
 
 ### graphs
 + two chinese algorithm
