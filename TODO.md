@@ -18,7 +18,7 @@
 
 ### math
 - gcdex?
-- Miller-Rabin test, Pollard heuristics?
++ Miller-Rabin test, Pollard heuristics
 - первые n обратных по модулю, phi(n) для первых n
 - numbers with many divisors, Bell numbers ...
 - количество простых до n (заботать код Рената)
