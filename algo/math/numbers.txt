@@ -12,6 +12,7 @@ large primes: 10^18 +3, +31, +3111
 fft modules for 2**20:
 7340033 13631489 26214401 28311553 70254593
 976224257 (largest less than 10**9)
+1261007895663738881ll (root 397650301651152680ll)
 
 fibonacci numbers:
 1, 2: 1
@@ -42,3 +43,4 @@ catalan numbers:
 2**64 = 18446744073709551616 = 1.8e19
 
 highly composite: todo
+
