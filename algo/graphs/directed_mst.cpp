@@ -3,6 +3,7 @@ using namespace std;
 #define forn(i, n) for (int i = 0; i < (int)(n); ++i)
 #define all(x) (x).begin(), (x).end()
 const int inf = 1e9+100500;
+typedef vector<int> vi;
 
 // max width team notebook allows -----------------------------------
 
@@ -59,7 +60,7 @@ void tarjan(int v, const Graph& e, vector<int>& comp) {
 }
 
 vector<Edge> bfs(
-    const Graph& e, const vector<int>& init, const vector<int>& comp)
+    const Graph& e,const vi& init, const vi& comp)
 {
     int n = e.size();
     forn(i, n) b[i] = 0;
@@ -103,7 +104,7 @@ vector<Edge> run(Graph e, int root) {
         return firstResult;
     }
 
-    // find stongly connected components and build compressed graph
+    // find stongly connected comp-s and build compressed graph
     vector<int> comp(n);
     forn(i, n) b[i] = 0;
     nc = 0;

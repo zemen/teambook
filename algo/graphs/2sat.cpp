@@ -86,5 +86,6 @@ int main() {
     TwoSAT::addEdge(0, 3); //x or !y
     TwoSAT::addEdge(3, 3); //!y or !y
     assert(TwoSAT::run());
-    cout << TwoSAT::res[0] << ' ' << TwoSAT::res[1] << '\n'; //1 0
+    cout << TwoSAT::res[0] << ' ' << TwoSAT::res[1] << '\n';
+    //1 0
 }

@@ -29,7 +29,7 @@ void build() {
         n_cls = 0;
         forn(i, n) {
             if (i && (cls[sa[i]] != cls[sa[i-1]] ||
-                    cls[(sa[i] + d) % n] != cls[(sa[i-1] + d) % n])) {
+                    cls[(sa[i]+d)%n] != cls[(sa[i-1]+d)%n])) {
                 ++n_cls;
             }
             new_cls[sa[i]] = n_cls;
@@ -38,14 +38,14 @@ void build() {
         forn(i, n) cls[i] = new_cls[i];
     }
 
-    // cls is also a inv permutation of sa if a string is not cyclic
+    // cls is also a inv perm of sa if a string is not cyclic
     // (i.e. a position of i-th lexicographical suffix)
     int val = 0;
     forn(i, n) {
         if (val) --val;
         if (cls[i] == n-1) continue;
         int j = sa[cls[i] + 1];
-        while (i + val != n && j + val != n && s[i+val] == s[j+val])
+        while (i+val != n && j+val != n && s[i+val] == s[j+val])
             ++val;
         lcp[cls[i]] = val;
     }

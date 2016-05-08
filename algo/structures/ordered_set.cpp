@@ -19,7 +19,8 @@ int main() {
     std::cout << *X.find_by_order(1) << std::endl; // 2
     std::cout << *X.find_by_order(2) << std::endl; // 4
     std::cout << *X.find_by_order(4) << std::endl; // 16
-    std::cout << std::boolalpha << (end(X)==X.find_by_order(6)) << std::endl; // true
+    std::cout << std::boolalpha <<
+        (end(X)==X.find_by_order(6)) << std::endl; // true
 
     std::cout << X.order_of_key(-5) << std::endl;  // 0
     std::cout << X.order_of_key(1) << std::endl;   // 0

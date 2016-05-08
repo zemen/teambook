@@ -11,7 +11,8 @@ ld det3x3(line &l1, line &l2, line &l3) {
 }
 
 vector<pt> halfplanesIntersecion(vector<line> lines) {
-    sort(lines.begin(), lines.end(), [](const line &a, const line &b) {
+    sort(lines.begin(), lines.end(),
+        [](const line &a, const line &b) {
                 bool ar = a.right(), br = b.right();
                 if (ar ^ br)
                     return ar;
@@ -36,7 +37,7 @@ vector<pt> halfplanesIntersecion(vector<line> lines) {
     forn (i, 2 * n) {
         line l = lines[i % n];
         while ((int) hull.size() >= 2) {
-            ld D = det3x3(*prev(prev(hull.end())), hull.back(), l);
+            ld D = det3x3(*next(hull.rbegin()), hull.back(), l);
             if (ge(D, 0))
                 break;
             hull.pop_back();

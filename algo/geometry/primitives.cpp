@@ -20,7 +20,7 @@ void gassert(bool) {}
 struct pt {
     ld x, y;
 
-    pt operator+(const pt &p) const { return pt{x + p.x, y + p.y}; } 
+    pt operator+(const pt &p) const { return pt{x + p.x, y + p.y}; }
     pt operator-(const pt &p) const { return pt{x - p.x, y - p.y}; }
     ld operator*(const pt &p) const { return x * p.x + y * p.y; }
     ld operator%(const pt &p) const { return x * p.y - y * p.x; }
@@ -48,6 +48,7 @@ struct pt {
 istream &operator>>(istream &in, pt &p) { return in >> p.x >> p.y; }
 ostream &operator<<(ostream &out, const pt &p) { return out << p.x << ' ' << p.y; }
 
+//BEGIN_CODE
 //WARNING! do not forget to normalize vector (a,b)
 struct line {
     ld a, b, c;
@@ -78,8 +79,10 @@ struct line {
 
 ld pointSegmentDist(pt p, pt a, pt b) {
     ld res = min((p - a).abs(), (p - b).abs());
-    if (a != b && ge((p - a) * (b - a), 0) && ge((p - b) * (a - b), 0))
-        res = min(res, fabsl((p - a) % (b - a)) / (b - a).abs());
+    if (a != b && ge((p - a) * (b - a), 0) &&
+            ge((p - b) * (a - b), 0))
+        res = min(res,
+            fabsl((p - a) % (b - a)) / (b - a).abs());
     return res;
 }
 
@@ -108,8 +111,10 @@ bool pointInsideSegment(pt p, pt a, pt b) {
 
 bool checkSegmentIntersection(pt a, pt b, pt c, pt d) {
     if (eq((a - b) % (c - d), 0)) {
-        if (pointInsideSegment(a, c, d) || pointInsideSegment(b, c, d) || 
-                pointInsideSegment(c, a, b) || pointInsideSegment(d, a, b)) {
+        if (pointInsideSegment(a, c, d) ||
+            pointInsideSegment(b, c, d) ||
+            pointInsideSegment(c, a, b) ||
+            pointInsideSegment(d, a, b)) {
             //intersection of parallel segments
             return true;
         }
@@ -137,7 +142,8 @@ bool checkSegmentIntersection(pt a, pt b, pt c, pt d) {
     return true;
 }
 
-//WARNING! run checkSegmentIntersecion before and process parallel case manually
+// WARNING! run checkSegmentIntersecion before and process
+// parallel case manually
 pt segmentsIntersection(pt a, pt b, pt c, pt d) {
     ld S = (b - a) % (d - c);
     ld s1 = (c - a) % (d - a);
@@ -164,7 +170,7 @@ vector<pt> circlesIntersction(pt a, ld r1, pt b, ld r2) {
     if (num == 1)
         return {h};
     ld hp = sqrtl(max(0.L, 1 - cosa * cosa)) * r1;
-    
+
     pt w = ((b - a) / d * hp).rot();
     return {h + w, h - w};
 }
@@ -198,7 +204,7 @@ vector<pt> lineCircleIntersection(line l, pt a, ld r) {
     pt h = a - pt{l.a, l.b} * d;
     if (eq(fabsl(d), r))
         return {h};
-    pt w = pt{l.a, l.b}.rot() * sqrtl(max<ld>(0, sqr(r) - sqr(d)));
+    pt w(pt{l.a, l.b}.rot() * sqrtl(max<ld>(0, sqr(r)-sqr(d))));
     return {h + w, h - w};
 }
 

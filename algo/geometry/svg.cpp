@@ -2,6 +2,8 @@
 using namespace std;
 #include "primitives.cpp"
 
+//NO_LONGLINES_CHECK
+
 //BEGIN_CODE
 struct SVG {
     FILE *out;
