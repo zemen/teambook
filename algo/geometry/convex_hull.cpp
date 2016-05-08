@@ -16,10 +16,12 @@ struct Hull {
     vector<pt> top, bot;
 
     void append(pt p) {
-        while (bot.size() > 1 && ge((p - bot.back()) % (bot.back() - *next(bot.rbegin())), 0))
+        while (bot.size() > 1 && ge((p - bot.back())
+                % (bot.back() - *next(bot.rbegin())), 0))
             bot.pop_back();
         bot.push_back(p);
-        while (top.size() > 1 && ge(0, (p - top.back()) % (top.back() - *next(top.rbegin()))))
+        while (top.size() > 1 && ge(0, (p - top.back())
+                % (top.back() - *next(top.rbegin()))))
             top.pop_back();
         top.push_back(p);
     }

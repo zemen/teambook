@@ -1,11 +1,12 @@
 #include <bits/stdc++.h>
 using namespace std;
 #define forn(i,n) for (int i = 0; i < int(n); ++i)
+typedef vector<int> vi;
 
 //BEGIN_CODE
 //actual odd length is (odd[i] * 2 - 1)
 //actual even length is (even[i] * 2)
-void manacher(const string &s, vector<int> &odd, vector<int> &even) {
+void manacher(const string &s, vi &odd, vi &even) {
     int n = s.size();
     odd.resize(n);
     int c = -1, r = -1;
@@ -21,7 +22,8 @@ void manacher(const string &s, vector<int> &odd, vector<int> &even) {
     even.resize(n - 1);
     forn (i, n - 1) {
         int k = (r <= i ? 0 : min(even[2 * c - i], r - i));
-        while (i + k + 1 < n && i - k >= 0 && s[i + k + 1] == s[i - k])
+        while (i + k + 1 < n && i - k >= 0 &&
+                s[i + k + 1] == s[i - k])
             ++k;
         even[i] = k;
         if (i + k > r)

@@ -37,14 +37,15 @@ struct Tree {
     }
 
     //Careful here: cr = 2 * maxn
-    int get(int l, int r, int v = 1, int cl = 0, int cr = 2 * maxn) {
+    int get(int l, int r, int v=1, int cl=0, int cr = 2*maxn) {
         cr = min(cr, base);
         if (l <= cl && cr <= r)
             return t[v];
         if (r <= cl || cr <= l)
             return 0;
         int cc = (cl + cr) / 2;
-        return max(get(l, r, v * 2, cl, cc), get(l, r, v * 2 + 1, cc, cr));
+        return max(get(l, r, v * 2, cl, cc),
+            get(l, r, v * 2 + 1, cc, cr));
     }
 };
 

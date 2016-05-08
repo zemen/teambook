@@ -4,6 +4,7 @@ using namespace std;
 
 #include "primitives.cpp"
 
+//BEGIN_CODE
 bool pointInsidePolygon(pt a, pt *p, int n) {
     double sumAng = 0;
     forn (i, n) {
@@ -23,7 +24,8 @@ bool segmentInsidePolygon(pt a, pt b, pt *p, int n) {
         return true;
     forn (i, n) {
         pt c = p[i];
-        if (eq((a - c) % (b - c), 0) && gt(0, (a - c) * (b - c))) {
+        if (eq((a - c) % (b - c), 0) &&
+                gt(0, (a - c) * (b - c))) {
             //point on segment
             pt pr = p[(i + n - 1) % n];
             pt nx = p[(i + 1) % n];
@@ -31,7 +33,8 @@ bool segmentInsidePolygon(pt a, pt b, pt *p, int n) {
                 return false;
             ld s1 = (pr - a) % (b - a);
             ld s2 = (nx - a) % (b - a);
-            if ((gt(s1, 0) || gt(s2, 0)) && (gt(0, s1) || gt(0, s2)))
+            if ((gt(s1, 0) || gt(s2, 0)) &&
+                    (gt(0, s1) || gt(0, s2)))
                 return false;
         }
         //interval intersection
