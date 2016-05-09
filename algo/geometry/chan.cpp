@@ -8,13 +8,13 @@ const ld eps = 1e-9;
 
 mt19937 rr(111);
 ld rndEps() {
-    return (ld(rr()) / rr.max() - 0.5) / 1e6;
+    return (ld(rr()) / rr.max() - 0.5) / 1e5;
 }
 
 bool gt(ld a, ld b) { return a - b > eps; }
 bool lt(ld a, ld b) { return b - a > eps; }
+bool eq(ld a, ld b) { return fabsl(a - b) < eps; }
 
-//BEGIN_CODE
 struct pt {
     ld x, y, z;
     ld ox, oy, oz;
@@ -27,6 +27,24 @@ struct pt {
 
     pt(ld x, ld y, ld z): x(x), y(y), z(z) {}
 
+    pt operator-(const pt &p) const {
+        return pt(x - p.x, y - p.y, z - p.z);
+    }
+
+    ld operator*(const pt &p) const {
+        return x * p.x + y * p.y + z * p.z;
+    }
+
+    pt operator%(const pt &p) const {
+        return pt(y * p.z - z * p.y,
+                  z * p.x - x * p.z,
+                  x * p.y - y * p.x);
+    }
+    
+    bool operator==(const pt &a) {
+        return eq(x, a.x) && eq(y, a.y) && eq(z, a.z);
+    }
+
     void transform(bool rev) {
         if (rev) {
             x = ox, y = oy, z = oz;
@@ -36,7 +54,6 @@ struct pt {
         }
     }
 };
-//END_CODE
 
 ostream &operator<<(ostream &out, pt &p) {
     return out << p.x << ' ' << p.y << ' ' << p.z;
@@ -48,14 +65,13 @@ istream &operator>>(istream &in, pt &p) {
 
 typedef tuple<int, int, int> Facet;
 
-//BEGIN_CODE
 namespace Chan {
 int n;
 pt p[maxn];
 
 ld turn(int p1, int p2, int p3) {
     assert(p1 != -1 && p2 != -1 && p3 != -1);
-    return (p[p2].x - p[p1].x) * (p[p3].y - p[p1].y) -
+    return (p[p2].x - p[p1].x) * (p[p3].y - p[p1].y) - 
         (p[p3].x - p[p1].x) * (p[p2].y - p[p1].y);
 }
 
@@ -91,12 +107,14 @@ vector<int> buildHull(int l, int r, bool upper) {
     auto R = buildHull(mid, r, upper);
     reverse(L.begin(), L.end());
     reverse(R.begin(), R.end());
-    int u = l, v = r - 1;
+    int u = mid - 1, v = mid;
     while (true) {
-        if (p[u].nx!=-1 && ((turn(u, p[u].nx, v)>0)^upper))
-            u = p[u].nx;
-        else if (p[v].pr!=-1 && ((turn(u, p[v].pr, v)>0)^upper))
-            v = p[v].pr;
+        if (p[u].pr != -1 && 
+                ((turn(p[u].pr, u, v) < 0) ^ upper))
+            u = p[u].pr;
+        else if (p[v].nx != -1 && 
+                ((turn(u, v, p[v].nx) < 0) ^ upper))
+            v = p[v].nx;
         else
             break;
     }
@@ -126,7 +144,7 @@ vector<int> buildHull(int l, int r, bool upper) {
         ld nt = 1e100;
         int type = -1;
         forn (i, 6)
-            if (gt(t[i], T) && t[i] < nt)
+            if ((t[i] - T >= 1e-15) && t[i] < nt)
                 nt = t[i], type = i;
         if (type == -1)
             break;
@@ -179,6 +197,7 @@ vector<int> buildHull(int l, int r, bool upper) {
                 u = id;
         }
     }
+
     return A;
 }
 
@@ -190,6 +209,7 @@ vector<Facet> getFacets() {
     sort(p, p + n, [](const pt &a, const pt &b) {
                 return a.x < b.x;
             });
+
     vector<Facet> facets;
     forn (q, 2) {
         auto movie = buildHull(0, n, q);
@@ -206,7 +226,6 @@ vector<Facet> getFacets() {
     return facets;
 }
 } //namespace Chan
-//END_CODE
 
 int main() {
     int n;
@@ -215,11 +234,27 @@ int main() {
     forn (i, n)
         cin >> Chan::p[i];
     auto facets = Chan::getFacets();
-    cerr << facets.size() << " facets" << '\n';
-    cerr << "vertices:\n";
-    forn (i, n)
-        cerr << Chan::p[i] << '\n';
-    cerr << "facets:\n";
-    for (auto f: facets)
-        cerr << get<0>(f) << ' ' << get<1>(f) << ' ' << get<2>(f) << '\n';
+    set<int> nodes;
+    for (auto f: facets) {
+        nodes.insert(get<0>(f));
+        nodes.insert(get<1>(f));
+        nodes.insert(get<2>(f));
+    }
+    assert(nodes.size() * 2 == facets.size() + 4);
+    ld V = 0, S = 0;
+    for (auto f: facets) {
+        pt v1 = Chan::p[get<1>(f)] - Chan::p[get<0>(f)];
+        pt v2 = Chan::p[get<2>(f)] - Chan::p[get<0>(f)];
+        pt v3 = Chan::p[get<0>(f)];
+        pt vv = v1 % v2;
+        forn (i, n) {
+            pt v4 = Chan::p[i] - Chan::p[get<0>(f)];
+            assert(v4 * vv < 0.1);
+        }
+        S += sqrtl(vv.x * vv.x + vv.y * vv.y + vv.z * vv.z) / 2;
+        V += vv * v3 / 6;
+    }
+    cout.precision(10);
+    cout << fixed;
+    cout << S << ' ' << V << '\n';
 }
