@@ -6,6 +6,7 @@ using namespace std;
 const int maxn = 100100;
 const int maxm = 100100;
 
+// BEGIN_CODE
 struct Edge {
     int to, id;
 };
@@ -32,6 +33,7 @@ void addEdge(int u, int v) {
     g[u].push_back(Edge{v, edges});
     g[v].push_back(Edge{u, edges++});
 }
+//END_CODE
 
 int main() {
 }

@@ -49,7 +49,6 @@ int find_path(int root) {
         for (int to: e[v]) {
             if (base[v] == base[to] || mt[v] == to) continue;
             if (to==root || (mt[to] != -1 && p[mt[to]] != -1)) {
-//                 cerr << "blossom" << endl;
                 int curbase = lca(v, to);
                 forn(i, n) blos[i] = 0;
                 mark_path(v, curbase, to);

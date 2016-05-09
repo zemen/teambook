@@ -14,6 +14,7 @@ ld rndEps() {
 bool gt(ld a, ld b) { return a - b > eps; }
 bool lt(ld a, ld b) { return b - a > eps; }
 
+//BEGIN_CODE
 struct pt {
     ld x, y, z;
     ld ox, oy, oz;
@@ -35,6 +36,7 @@ struct pt {
         }
     }
 };
+//END_CODE
 
 ostream &operator<<(ostream &out, pt &p) {
     return out << p.x << ' ' << p.y << ' ' << p.z;
@@ -46,13 +48,14 @@ istream &operator>>(istream &in, pt &p) {
 
 typedef tuple<int, int, int> Facet;
 
+//BEGIN_CODE
 namespace Chan {
 int n;
 pt p[maxn];
 
 ld turn(int p1, int p2, int p3) {
     assert(p1 != -1 && p2 != -1 && p3 != -1);
-    return (p[p2].x - p[p1].x) * (p[p3].y - p[p1].y) - 
+    return (p[p2].x - p[p1].x) * (p[p3].y - p[p1].y) -
         (p[p3].x - p[p1].x) * (p[p2].y - p[p1].y);
 }
 
@@ -90,9 +93,9 @@ vector<int> buildHull(int l, int r, bool upper) {
     reverse(R.begin(), R.end());
     int u = l, v = r - 1;
     while (true) {
-        if (p[u].nx != -1 && ((turn(u, p[u].nx, v) > 0) ^ upper))
+        if (p[u].nx!=-1 && ((turn(u, p[u].nx, v)>0)^upper))
             u = p[u].nx;
-        else if (p[v].pr != -1 && ((turn(u, p[v].pr, v) > 0) ^ upper))
+        else if (p[v].pr!=-1 && ((turn(u, p[v].pr, v)>0)^upper))
             v = p[v].pr;
         else
             break;
@@ -203,6 +206,7 @@ vector<Facet> getFacets() {
     return facets;
 }
 } //namespace Chan
+//END_CODE
 
 int main() {
     int n;
