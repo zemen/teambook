@@ -84,8 +84,11 @@ echo "\end{document}" >> $tex_file
 
 # TOC requires this to be run twice
 for((i=0;i<2;++i)); do
-    pdflatex -shell-escape $tex_file -output-directory
+#     latex -shell-escape $tex_file (*)
+    pdflatex -shell-escape $tex_file
 done
+# dvipdfm -p a4 teambook.dvi (*)
+# uncomment (*) lines if you get auto-pst-pdf error
 
 rm -f teambook.{fls,aux,log,out,toc,dvi}
 rm -f teambook-pics.pdf
