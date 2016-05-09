@@ -110,6 +110,7 @@ void factorize(ll x, vector<ll> &p) {
         }
     }
 }
+//END_CODE
 
 bool isPrimeSlow(int x) {
     for (int i = 2; i * i <= x; ++i)
@@ -134,7 +135,6 @@ void test() {
         assert(prod == i);
     }
 }
-//END_CODE
 
 int main() {
     test();

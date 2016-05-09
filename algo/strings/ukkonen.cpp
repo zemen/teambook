@@ -4,6 +4,7 @@ using namespace std;
 #define forn(i,n) for (int i = 0; i < int(n); ++i)
 const int inf = int(1e9) + int(1e5);
 
+// BEGIN CODE
 string s;
 const int alpha = 26;
 
@@ -130,6 +131,7 @@ namespace SuffixTree {
             addCharOnPos(i);
     }
 };
+// END_CODE
 
 int main() {
     cin >> s;
