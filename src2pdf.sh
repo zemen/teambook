@@ -34,6 +34,9 @@ src2latex() {
     elif [[ "$filename" == *.vim ]]; then
         echo $(renew_font $CODE_FONT)
         echo "\inputminted[linenos,breaklines]{vim}{$src}"
+    elif [[ "$filename" == *.tex ]]; then
+        echo $(renew_font $TEXT_FONT)
+        echo "\input{${src::-4}}" # remove .tex suffix
     else
         echo $(renew_font $TEXT_FONT)
         echo "\inputminted[breaklines]{html}{$src}"
@@ -51,7 +54,7 @@ EOF
     done
 }
 
-find . -type f -regex "./algo.*\.cpp\|.*.txt" |
+find . -type f -regex "./algo.*\.\(cpp\|tex\)\|.*.txt" |
 LC_ALL=C sort |
 sed 's/^\..//' |
 while read filename; do                ## Loop through each file

@@ -15,7 +15,6 @@
 - edmonds algorithm for maximum matching ???
 
 ### math
-- numbers with many divisors
 - количество простых до n (заботать код Рената)
 - simplex
 
