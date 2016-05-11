@@ -1,8 +1,7 @@
 # TODO list
 
 ### geometry
-+ Chan's 3d convex hull(почему авторский код не работает?)
-- выделение граней планарного графа
++ выделение граней планарного графа
 
 ### structures
 
@@ -12,7 +11,7 @@
 
 ### graphs
 + two chinese algorithm
-- edmonds algorithm for maximum matching ???
++ edmonds algorithm for maximum matching
 
 ### math
 - количество простых до n (заботать код Рената)
