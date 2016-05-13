@@ -118,6 +118,7 @@ vector<Edge> run(Graph e, int root) {
             ne[comp[v]].push_back({comp[t.to], t.w, t.id});
         }
     }
+    int oldnc = nc;
 
     // run recursively on compressed graph
     vector<Edge> subres = run(ne, comp[root]);
@@ -125,6 +126,7 @@ vector<Edge> run(Graph e, int root) {
     // find incoming edge id for each component, init queue
     // if there is an edge (u, v) between different components
     // than v is added to queue
+    nc = oldnc;
     vector<int> incomingId(nc);
     for (Edge e: subres) {
         incomingId[e.to] = e.id;
