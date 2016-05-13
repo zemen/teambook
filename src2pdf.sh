@@ -41,6 +41,7 @@ src2latex() {
         echo $(renew_font $TEXT_FONT)
         echo "\inputminted[breaklines]{html}{$src}"
     fi
+    echo
 }
 
 pictures() {
