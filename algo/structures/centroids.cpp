@@ -9,6 +9,7 @@ const int LG = 18; //2*maxn <= 2^LG
 
 vector<int> g[LG][maxn];
 int rt[LG][maxn];
+int from[LG][maxn];
 
 namespace Cenroids {
 
@@ -38,14 +39,18 @@ void findCenter(int u, int prev = -1, int up = 0) {
         CENTER = u;
 }
 
-void markAll(int u, int prev = -1) {
+void markAll(int u, int prev = -1, int subtree = -1) {
     rt[D][u] = CENTER;
+    from[D][u] = subtree;
     for (int v: g[D][u]) {
         if (v == prev)
             continue;
         g[D + 1][u].push_back(v);
         g[D + 1][v].push_back(u);
-        markAll(v, u);
+        if (subtree == -1)
+            markAll(v, u, v);
+        else
+            markAll(v, u, subtree);
     }
 }
 
