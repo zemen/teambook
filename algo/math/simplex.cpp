@@ -40,7 +40,7 @@ void init(int _n, int _m, ld A[][maxn], ld *b, ld *c) {
         D[m][j] = c[j];
         D[m + 1][j] = 0;
     }
-    D[m][n + 1] = D[m][n] = D[n][m + 1] = 0;
+    D[m][n + 1] = D[m][n] = D[m + 1][n + 1] = 0;
     D[m + 1][n] = -1;
     iota(B, B + m, n);
     iota(N, N + n, 0);
