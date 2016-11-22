@@ -24,33 +24,33 @@ bool segmentInsidePolygon(pt a, pt b, pt *p, int n) {
         return true;
     forn (i, n) {
         pt c = p[i];
-        if (eq((a - c) % (b - c), 0) &&
-                gt(0, (a - c) * (b - c))) {
+        if (ze((a - c) % (b - c)) &&
+                (a - c) * (b - c) < -eps) {
             //point on segment
             pt pr = p[(i + n - 1) % n];
             pt nx = p[(i + 1) % n];
-            if (gt((c - pr) % (nx - c), 0))
+            if ((c - pr) % (nx - c) > eps)
                 return false;
             ld s1 = (pr - a) % (b - a);
             ld s2 = (nx - a) % (b - a);
-            if ((gt(s1, 0) || gt(s2, 0)) &&
-                    (gt(0, s1) || gt(0, s2)))
+            if ((s1 > eps || s2 > eps) &&
+                    (s1 < -eps || s2 < -eps))
                 return false;
         }
         //interval intersection
         pt d = p[(i + 1) % n];
         ld s1 = (a - c) % (d - c);
         ld s2 = (b - c) % (d - c);
-        if (ge(s1, 0) && ge(s2, 0))
+        if (s1 >= -eps && s2 >= -eps)
             continue;
-        if (ge(0, s1) && ge(0, s2))
+        if (s1 <= eps && s2 <= eps)
             continue;
 
         s1 = (c - a) % (b - a);
         s2 = (d - a) % (b - a);
-        if (ge(s1, 0) && ge(s2, 0))
+        if (s1 >= -eps && s2 >= -eps)
             continue;
-        if (ge(0, s1) && ge(0, s2))
+        if (s1 <= eps && s2 <= eps)
             continue;
 
         return false;

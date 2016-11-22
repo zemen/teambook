@@ -17,7 +17,7 @@ vector<pt> halfplanesIntersecion(vector<line> lines) {
                 if (ar ^ br)
                     return ar;
                 ld prod = (pt{a.a, a.b} % pt{b.a, b.b});
-                if (!eq(prod, 0))
+                if (!ze(prod))
                     return prod > 0;
                 return a.c < b.c;
             });
@@ -38,7 +38,7 @@ vector<pt> halfplanesIntersecion(vector<line> lines) {
         line l = lines[i % n];
         while ((int) hull.size() >= 2) {
             ld D = det3x3(*next(hull.rbegin()), hull.back(), l);
-            if (ge(D, 0))
+            if (D >= -eps)
                 break;
             hull.pop_back();
         }
@@ -70,7 +70,7 @@ vector<pt> halfplanesIntersecion(vector<line> lines) {
     }
     center = center / n;
     for (auto l: lines)
-        if (gt(0, l.signedDist(center))) {
+        if (l.signedDist(center) < -eps) {
             //empty intersection
             return {};
         }

@@ -6,9 +6,8 @@ typedef long double ld;
 
 const ld eps = 1e-9;
 
-bool eq(ld a, ld b) { return fabsl(a - b) < eps; }
-bool ge(ld a, ld b) { return a - b > -eps; }
-bool gt(ld a, ld b) { return a - b > eps; }
+bool ze(ld a) { return fabsl(a) < eps; }
+bool eq(ld a, ld b) { return ze(a - b); }
 ld sqr(ld x) { return x * x; }
 
 #ifdef LOCAL
@@ -26,12 +25,12 @@ struct pt {
     ld operator%(const pt &p) const { return x * p.y - y * p.x; }
 
     pt operator*(const ld &a) const { return pt{x * a, y * a}; }
-    pt operator/(const ld &a) const { gassert(!eq(a, 0)); return pt{x / a, y / a}; }
+    pt operator/(const ld &a) const { gassert(!ze(a)); return pt{x / a, y / a}; }
     void operator*=(const ld &a) { x *= a, y *= a; }
-    void operator/=(const ld &a) { gassert(!eq(a, 0)); x /= a, y /= a; }
+    void operator/=(const ld &a) { gassert(!ze(a)); x /= a, y /= a; }
 
     bool operator<(const pt &p) const {
-        if (eq(x, p.x)) return gt(p.y, y);
+        if (eq(x, p.x)) return y - p.y < -eps;
         return x < p.x;
     }
 
@@ -63,12 +62,12 @@ struct line {
     }
 
     bool right() const {
-        return gt(a, 0) || (eq(a, 0) && gt(b, 0));
+        return a > eps || (ze(a) && b > eps);
     }
 
     line(ld _a, ld _b, ld _c): a(_a), b(_b), c(_c) {
         ld d = pt{a, b}.abs();
-        gassert(!eq(d, 0));
+        gassert(!ze(d));
         a /= d, b /= d, c /= d;
     }
 
@@ -79,8 +78,8 @@ struct line {
 
 ld pointSegmentDist(pt p, pt a, pt b) {
     ld res = min((p - a).abs(), (p - b).abs());
-    if (a != b && ge((p - a) * (b - a), 0) &&
-            ge((p - b) * (a - b), 0))
+    if (a != b && (p - a) * (b - a) >= 0 &&
+            (p - b) * (a - b) >= 0)
         res = min(res,
             fabsl((p - a) % (b - a)) / (b - a).abs());
     return res;
@@ -88,7 +87,7 @@ ld pointSegmentDist(pt p, pt a, pt b) {
 
 pt linesIntersection(line l1, line l2) {
     ld D = l1.a * l2.b - l1.b * l2.a;
-    if (eq(D, 0)) {
+    if (ze(D)) {
         if (eq(l1.c, l2.c)) {
             //equal lines
         } else {
@@ -98,19 +97,19 @@ pt linesIntersection(line l1, line l2) {
     ld dx = -l1.c * l2.b + l1.b * l2.c;
     ld dy = -l1.a * l2.c + l1.c * l2.a;
     pt res{dx / D, dy / D};
-    //gassert(eq(l1.signedDist(res), 0));
-    //gassert(eq(l2.signedDist(res), 0));
+    //gassert(ze(l1.signedDist(res)));
+    //gassert(ze(l2.signedDist(res)));
     return res;
 }
 
 bool pointInsideSegment(pt p, pt a, pt b) {
-    if (!eq((p - a) % (p - b), 0))
+    if (!ze((p - a) % (p - b)))
         return false;
-    return ge(0, (a - p) * (b - p));
+    return (a - p) * (b - p) <= eps;
 }
 
 bool checkSegmentIntersection(pt a, pt b, pt c, pt d) {
-    if (eq((a - b) % (c - d), 0)) {
+    if (ze((a - b) % (c - d))) {
         if (pointInsideSegment(a, c, d) ||
             pointInsideSegment(b, c, d) ||
             pointInsideSegment(c, a, b) ||
@@ -122,22 +121,15 @@ bool checkSegmentIntersection(pt a, pt b, pt c, pt d) {
     }
 
     ld s1, s2;
-
-    s1 = (c - a) % (b - a);
-    s2 = (d - a) % (b - a);
-    if (gt(s1, 0) && gt(s2, 0))
-        return false;
-    if (gt(0, s1) && gt(0, s2))
-        return false;
-
-    swap(a, c), swap(b, d);
-
-    s1 = (c - a) % (b - a);
-    s2 = (d - a) % (b - a);
-    if (gt(s1, 0) && gt(s2, 0))
-        return false;
-    if (gt(0, s1) && gt(0, s2))
-        return false;
+    forn (q, 2) {
+        s1 = (c - a) % (b - a);
+        s2 = (d - a) % (b - a);
+        if (s1 > eps && s2 > eps)
+            return false;
+        if (s1 < -eps && s2 < -eps)
+            return false;
+        swap(a, c), swap(b, d);
+    }
 
     return true;
 }
@@ -157,7 +149,7 @@ vector<pt> circlesIntersction(pt a, ld r1, pt b, ld r2) {
     if (a == b && eq(r1, r2)) {
         //equal circles
     }
-    if (gt(d2, sqr(r1 + r2)) || gt(sqr(r1 - r2), d2)) {
+    if (d2 - sqr(r1 + r2) > eps || sqr(r1 - r2) - d2 > eps) {
         //empty intersection
         return {};
     }
@@ -180,7 +172,7 @@ vector<pt> circleTangents(pt a, ld r, pt p) {
     ld d2 = (a - p).abs2();
     ld d = (a - p).abs();
 
-    if (gt(sqr(r), d2)) {
+    if (sqr(r) - d2 > eps) {
         //no tangents
         return {};
     }
@@ -199,7 +191,7 @@ vector<pt> circleTangents(pt a, ld r, pt p) {
 
 vector<pt> lineCircleIntersection(line l, pt a, ld r) {
     ld d = l.signedDist(a);
-    if (gt(fabsl(d), r))
+    if (fabsl(d) - r > eps)
         return {};
     pt h = a - pt{l.a, l.b} * d;
     if (eq(fabsl(d), r))
@@ -221,7 +213,7 @@ vector<line> commonTangents(pt a, ld r1, pt b, ld r2) {
         for (int j = -1; j <= 1; j += 2) {
             ld r = r2 * j - r1 * i;
             ld d = z - sqr(r);
-            if (gt(0, d))
+            if (d < -eps)
                 continue;
             d = sqrtl(max<ld>(0, d));
             pt magic = pt{r, d} / z;

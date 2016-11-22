@@ -9,19 +9,19 @@ bool cmpAngle(const pt &a, const pt &b) {
     bool ar = a.right(), br = b.right();
     if (ar ^ br)
         return ar;
-    return gt(a % b, 0);
+    return a % b > eps;
 }
 
 struct Hull {
     vector<pt> top, bot;
 
     void append(pt p) {
-        while (bot.size() > 1 && ge((p - bot.back())
-                % (bot.back() - *next(bot.rbegin())), 0))
+        while (bot.size() > 1 && (p - bot.back())
+                % (bot.back() - *next(bot.rbegin())) >= -eps)
             bot.pop_back();
         bot.push_back(p);
-        while (top.size() > 1 && ge(0, (p - top.back())
-                % (top.back() - *next(top.rbegin()))))
+        while (top.size() > 1 && (p - top.back())
+                % (top.back() - *next(top.rbegin())) <= eps)
             top.pop_back();
         top.push_back(p);
     }
