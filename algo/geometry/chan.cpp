@@ -1,3 +1,6 @@
+//NO_TEAMBOOK
+// This implementation is unstable for precision errors
+
 #include <bits/stdc++.h>
 using namespace std;
 #define forn(i,n) for (int i = 0; i < int(n); ++i)
