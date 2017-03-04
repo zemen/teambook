@@ -4,6 +4,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 #define forn(i,n) for (int i = 0; i < int(n); ++i)
+#define all(x) x.begin(), x.end()
 typedef long double ld;
 
 const int maxn = 100100;
@@ -23,8 +24,6 @@ struct pt {
     ld ox, oy, oz;
     int pr, nx;
     bool inHull;
-
-    static pt *NIL;
 
     pt() {}
 
@@ -66,6 +65,7 @@ istream &operator>>(istream &in, pt &p) {
     return in >> p.x >> p.y >> p.z;
 }
 
+//BEGIN_CODE
 typedef tuple<int, int, int> Facet;
 
 namespace Chan {
@@ -108,8 +108,8 @@ vector<int> buildHull(int l, int r, bool upper) {
     int mid = (l + r) / 2;
     auto L = buildHull(l, mid, upper);
     auto R = buildHull(mid, r, upper);
-    reverse(L.begin(), L.end());
-    reverse(R.begin(), R.end());
+    reverse(all(L));
+    reverse(all(R));
     int u = mid - 1, v = mid;
     while (true) {
         if (p[u].pr != -1 && 
@@ -229,6 +229,7 @@ vector<Facet> getFacets() {
     return facets;
 }
 } //namespace Chan
+//END_CODE
 
 int main() {
     int n;

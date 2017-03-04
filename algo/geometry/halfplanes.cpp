@@ -1,78 +1,75 @@
 #include <bits/stdc++.h>
 using namespace std;
 #define forn(i, n) for (int i = 0; i < int(n); ++i)
-#define forab(i, a, b) for (int i = int(a); i < int(b); ++i)
+#define all(x) x.begin(), x.end()
 #include "primitives.cpp"
+typedef vector<int> vi;
 
-ld det3x3(line &l1, line &l2, line &l3) {
-    return l1.a * (l2.b * l3.c - l2.c * l3.b) +
-           l1.b * (l2.c * l3.a - l2.a * l3.c) +
-           l1.c * (l2.a * l3.b - l2.b * l3.a);
+bool cmpLine(const line &a, const line &b) {
+    bool au = a.v.up(), bu = b.v.up();
+    if (au != bu)
+        return au;
+    ld prod = a.v % b.v;
+    if (!ze(prod))
+        return prod > 0;
+    // the strongest constraint is first for correct unique
+    return a.c > b.c;
 }
 
-vector<pt> halfplanesIntersecion(vector<line> lines) {
-    sort(lines.begin(), lines.end(),
-        [](const line &a, const line &b) {
-                bool ar = a.right(), br = b.right();
-                if (ar ^ br)
-                    return ar;
-                ld prod = (pt{a.a, a.b} % pt{b.a, b.b});
-                if (!ze(prod))
-                    return prod > 0;
-                return a.c < b.c;
-            });
-    vector<line> lines2;
-    pt pr;
-    forn (i, lines.size()) {
-        pt cur{lines[i].a, lines[i].b};
-        if (i == 0 || cur != pr)
-            lines2.push_back(lines[i]);
-        pr = cur;
-    }
-    lines = lines2;
-    int n = lines.size();
-    forn (i, n)
-        lines[i].id = i;
-    vector<line> hull;
-    forn (i, 2 * n) {
-        line l = lines[i % n];
-        while ((int) hull.size() >= 2) {
-            ld D = det3x3(*next(hull.rbegin()), hull.back(), l);
-            if (D >= -eps)
-                break;
-            hull.pop_back();
+bool eqLine(const line &a, const line &b) {
+    return a.v.up() == b.v.up() && ze(a.v % b.v);
+}
+
+//BEGIN_CODE
+ld det3x3(line a, line b, line c) {
+    return a.c * (b.v % c.v)
+         + b.c * (c.v % a.v)
+         + c.c * (a.v % b.v);
+}
+
+//check: bounding box is included
+vector<pt> halfplanesIntersection(vector<line> l) {
+    sort(all(l), cmpLine); //the strongest constraint is first
+    l.erase(unique(all(l), eqLine), l.end());
+    int n = sz(l);
+    vi st;
+    forn (iter, 2)
+        forn (i, n) {
+            while (sz(st) > 1) {
+                int j = st.back(), k = *next(st.rbegin());
+                if (l[k].v % l[i].v <= eps || 
+                        det3x3(l[k], l[j], l[i]) <= eps)
+                    break;
+                st.pop_back();
+            }
+            st.push_back(i);
         }
-        hull.push_back(l);
+
+    vi pos(n, -1);
+    bool ok = false;
+    forn (i, sz(st)) {
+        int id = st[i];
+        if (pos[id] != -1) {
+            st = vi(st.begin() + pos[id], st.begin() + i);
+            ok = true;
+            break;
+        } else
+            pos[id] = i;
     }
-    vector<int> firstTime(n, -1);
-    vector<line> v;
-    forn (i, hull.size()) {
-        int cid = hull[i].id;
-        if (firstTime[cid] == -1) {
-            firstTime[cid] = i;
-            continue;
-        }
-        forab(j, firstTime[cid], i)
-            v.push_back(hull[j]);
-        break;
-    }
-    n = v.size();
-    if (v.empty()) {
-        //empty intersection
+    if (!ok)
         return {};
-    }
-    v.push_back(v[0]);
+
     vector<pt> res;
-    pt center{0, 0};
-    forn (i, n) {
-        res.push_back(linesIntersection(v[i], v[i + 1]));
-        center = center + res.back();
+    pt M{0, 0};
+    int k = sz(st);
+    forn (i, k) {
+        line l1 = l[st[i]], l2 = l[st[(i + 1) % k]];
+        res.push_back(linesIntersection(l1, l2));
+        M = M + res.back();
     }
-    center = center / n;
-    for (auto l: lines)
-        if (l.signedDist(center) < -eps) {
-            //empty intersection
+    M = M * (1. / k);
+    for (int id: st)
+        if (l[id].signedDist(M) < -eps)
             return {};
-        }
     return res;
 }

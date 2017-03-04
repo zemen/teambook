@@ -16,17 +16,17 @@ bool pointInsidePolygon(pt a, pt *p, int n) {
     return fabs(sumAng) > 1;
 }
 
-//p must be oriented counterclockwise
+//check: p is oriented ccw
 bool segmentInsidePolygon(pt a, pt b, pt *p, int n) {
-    if (!pointInsidePolygon((a + b) / 2, p, n))
+    if (!pointInsidePolygon((a + b) * .5, p, n))
         return false;
-    if (a == b)
+    if (ze((a - b).abs()))
         return true;
     forn (i, n) {
         pt c = p[i];
         if (ze((a - c) % (b - c)) &&
                 (a - c) * (b - c) < -eps) {
-            //point on segment
+            //point inside interval
             pt pr = p[(i + n - 1) % n];
             pt nx = p[(i + 1) % n];
             if ((c - pr) % (nx - c) > eps)
