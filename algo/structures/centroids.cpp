@@ -15,7 +15,7 @@ namespace Cenroids {
 
 int D;
 int cnt[maxn];
-int CENTER, BOUND;
+int CENTER, BEST;
 
 void pre(int u, int prev = -1) {
     cnt[u] = 1;
@@ -35,8 +35,10 @@ void findCenter(int u, int prev = -1, int up = 0) {
         findCenter(v, u, up + cnt[u] - cnt[v]);
         worst = max(worst, cnt[v]);
     }
-    if (worst <= BOUND)
+    if (worst < BEST) {
         CENTER = u;
+        BEST = worst;
+    }
 }
 
 void markAll(int u, int prev = -1, int subtree = -1) {
@@ -57,11 +59,11 @@ void markAll(int u, int prev = -1, int subtree = -1) {
 void decompose(int u, int depth = 0) {
     D = depth;
     pre(u);
-    CENTER = -1, BOUND = cnt[u] / 2;
+    CENTER = -1, BEST = 1e9;
     findCenter(u);
     assert(CENTER != -1);
-    markAll(u);
     u = CENTER;
+    markAll(u);
     D = depth + 1;
     for (int v: g[D][u]) {
         auto it = find(g[D][v].begin(), g[D][v].end(), u);
