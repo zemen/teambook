@@ -34,7 +34,7 @@ namespace SuffixTree {
     }
 
     int at(int id) {
-        return s[id];
+        return s[id] - 'a';
     }
 
     void goDown(int l, int r) {
