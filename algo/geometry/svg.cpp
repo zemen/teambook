@@ -6,6 +6,7 @@ using namespace std;
 
 //BEGIN_CODE
 struct SVG {
+
     FILE *out;
     ld sc = 50;
 
