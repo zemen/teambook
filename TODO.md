@@ -1,6 +1,9 @@
 # TODO list
 
 - python stuff(Decimal, Frac, etc)
-- modular FFT and division
+- FFT division
 - do not take gcd in pollard
 - cool bases for miller-rabin
+- quaternions and basic 3d primitives
+- arc integral
+- fast oriented MST

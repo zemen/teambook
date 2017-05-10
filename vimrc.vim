@@ -1,14 +1,5 @@
 syntax on
-set ai
-set si
-set nu
-set et
-set ts=4
-set sts=4
-set sw=4
-set tm=300
-set cin
-set cinw+=forn,forab
+set ai si nu et ts=4 sts=4 sw=4 tm=300 cin cinw+=forn spr
 
 imap jk <esc>:w<cr>
 imap jj <esc>
@@ -20,6 +11,6 @@ map H ^
 map L $
 imap {<cr> {<cr>}<esc>O
 
-let $CPPFLAGS='-O2 -DLOCAL -Wall -Wextra -Wno-unused-result -std=c++11'
+let $CPPFLAGS='-O2 -DLOCAL -std=c++11 -Wall -Wextra -Wno-unused-result'
 map <f9> :w<cr>:make %:r<cr>
 map <f5> :w<cr>:!./%<<cr>

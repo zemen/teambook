@@ -1,14 +1,6 @@
 syntax on
-set ai
-set si
-set nu
-set et
-set ts=4
-set sts=4
-set sw=4
-set tm=300
-set cin
-set cinw+=forn,forab
+set ai si nu et ts=4 sts=4 sw=4 tm=300 cin cinw+=forn spr
+set bs=indent,eol,start
 
 imap jk <esc>:w<cr>
 imap jj <esc>
