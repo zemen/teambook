@@ -31,6 +31,9 @@ src2latex() {
     if [[ "$filename" == *.cpp ]]; then
         echo $(renew_font $CODE_FONT)
         echo "\inputminted[numbersep=1pt,linenos,breaklines]{c++}{$src}"
+    elif [[ "$filename" == *.py ]]; then
+        echo $(renew_font $CODE_FONT)
+        echo "\inputminted[numbersep=1pt,linenos,breaklines]{python}{$src}"
     elif [[ "$filename" == *.vim ]]; then
         echo $(renew_font $CODE_FONT)
         echo "\inputminted[linenos,breaklines]{vim}{$src}"
@@ -45,7 +48,7 @@ src2latex() {
 }
 
 pictures() {
-    for paper in misc/*; do
+    for paper in misc/*.ps; do
         cat << EOF
 \twocolumn[
 \section{Сеточка}
@@ -55,7 +58,7 @@ EOF
     done
 }
 
-find . -type f -regex "./algo.*\.\(cpp\|tex\)\|.*.txt" |
+find . -type f -regex "./algo.*\.\(cpp\|tex\|py\)\|.*.txt" |
 LC_ALL=C sort |
 sed 's/^\..//' |
 while read filename; do                ## Loop through each file

@@ -31,7 +31,7 @@ def check_file(filename):
             elif need_code:
                 code.append([i + 1, line])
     else:
-        code = zip(range(len(lines)), lines)
+        code = zip(range(1, len(lines) + 1), lines)
     lines = code
 
     fixable = [] # rem <= 5
@@ -80,7 +80,7 @@ total_errors = 0
 
 for entry in os.walk("algo"):
     for filename in entry[2]:
-        if not filename.endswith(".cpp"):
+        if not filename.endswith(".cpp") and not filename.endswith(".py"):
             continue
         fullname = os.path.join(entry[0], filename)
         if check_file(fullname):

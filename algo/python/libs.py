@@ -21,8 +21,8 @@ print()
 
 def pi():
     """Compute Pi to the current precision. """
-    getcontext().prec += 2  # extra digits for intermediate steps
-    three = D(3)      # substitute "three=3.0" for regular floats
+    getcontext().prec += 2 # extra digits for intermediate steps
+    three = D(3)     # substitute "three=3.0" for regular floats
     lasts, t, s, n, na, d, da = 0, three, 3, 1, 0, 0, 24
     while s != lasts:
         lasts = s
@@ -31,11 +31,11 @@ def pi():
         t = (t * n) / d
         s += t
     getcontext().prec -= 2
-    return +s               # unary plus applies the new precision
+    return +s             # unary plus applies the new precision
 
 def cos(x):
     """Return the cosine of x as measured in radians.
-    The Taylor series approximation works best for a small value of x.
+    The Taylor series approximation works best for a small x.
     For larger values, first compute x = x % (2 * pi). """
     getcontext().prec += 2
     i, lasts, s, fact, num, sign = 0, 0, 1, 1, 1, 1
@@ -51,7 +51,7 @@ def cos(x):
 
 def sin(x):
     """Return the sine of x as measured in radians.
-    The Taylor series approximation works best for a small value of x.
+    The Taylor series approximation works best for a small x.
     For larger values, first compute x = x % (2 * pi). """
     getcontext().prec += 2
     i, lasts, s, fact, num, sign = 1, 0, x, 1, x, 1
@@ -74,4 +74,3 @@ print(F(123)) # 123
 print(F('-.125')) # -1/8
 print(F(pi).limit_denominator(30)) # 22/7
 print(F(1, 2) ** 31) # 1/2147483648
-
