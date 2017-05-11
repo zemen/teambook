@@ -62,7 +62,7 @@ void refine(const vi& a) {
             part[lst[i]] = np;
         }
 
-        if (inq[p] || rp[np] - lp[np] < rp[p] - rp[np]) {
+        if (inq[p] || rp[np] - lp[np] < rp[p] - lp[p]) {
             inq[np] = 1;
             q.push_back(np);
         } else {
