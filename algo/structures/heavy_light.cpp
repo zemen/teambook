@@ -1,189 +1,166 @@
-/*
-    Heavy-light with 2 operations: add value to vertex, get maximum on path
-*/
+// timus 1553
+#ifdef LOCAL
+#define _GLIBCXX_DEBUG
+#endif
 #include <bits/stdc++.h>
 using namespace std;
-#define forn(i,n) for (int i = 0; i < int(n); ++i)
-#define sz(x) ((int) (x).size())
+#define forn(i, n) for (int i = 0; i < (int)(n); ++i)
+#define fore(i, b, e) for (int i = (int)(b); i <= (int)(e); ++i)
+#define ford(i, n) for (int i = (int)(n) - 1; i >= 0; --i)
+#define pb push_back
+#define fi first
+#define se second
+#define all(x) (x).begin(), (x).end()
+typedef vector<int> vi;
+typedef pair<int, int> pii;
+typedef long long i64;
+typedef unsigned long long u64;
+typedef long double ld;
+typedef long long ll;
 
-//BEGIN_CODE
 const int maxn = 100500;
-const int maxd = 17;
 
-vector<int> g[maxn];
-
-struct Tree {
-    vector<int> t;
-    int base;
-
-    Tree(): base(0) {
+struct Rmq {
+    vi rmq;
+    int sz;
+    Rmq() {}
+    Rmq(int n) {
+        sz = 1;
+        while (sz < n) sz *= 2;
+        rmq.assign(sz * 2, 0);
     }
 
-    Tree(int n) {
-        base = 1;
-        while (base < n)
-            base *= 2;
-        t = vector<int>(base * 2, 0);
-    }
-
-    void put(int v, int delta) {
-        assert(v < base);
-        v += base;
-        t[v] += delta;
-        while (v > 1) {
-            v /= 2;
-            t[v] = max(t[v * 2], t[v * 2 + 1]);
+    void put(int i, int x) {
+        i += sz;
+        rmq[i] += x;
+        for (i /= 2; i; i /= 2) {
+            rmq[i] = max(rmq[i*2], rmq[i*2+1]);
         }
     }
 
-    //Careful here: cr = 2 * maxn
-    int get(int l, int r, int v=1, int cl=0, int cr = 2*maxn) {
-        cr = min(cr, base);
-        if (l <= cl && cr <= r)
-            return t[v];
-        if (r <= cl || cr <= l)
-            return 0;
-        int cc = (cl + cr) / 2;
-        return max(get(l, r, v * 2, cl, cc),
-            get(l, r, v * 2 + 1, cc, cr));
-    }
-};
-
-namespace HLD {
-    int h[maxn];
-    int timer;
-    int in[maxn], out[maxn], cnt[maxn];
-    int p[maxd][maxn];
-    int vroot[maxn];
-    int vpos[maxn];
-    int ROOT;
-    Tree tree[maxn];
-
-    void dfs1(int u, int prev) {
-        p[0][u] = prev;
-        in[u] = timer++;
-        cnt[u] = 1;
-        for (int v: g[u]) {
-            if (v == prev)
-                continue;
-            h[v] = h[u] + 1;
-            dfs1(v, u);
-            cnt[u] += cnt[v];
-        }
-        out[u] = timer;
-    }
-
-    int dfs2(int u, int prev) {
-        int to = -1;
-        for (int v: g[u]) {
-            if (v == prev)
-                continue;
-            if (to == -1 || cnt[v] > cnt[to])
-                to = v;
-        }
-        int len = 1;
-        for (int v: g[u]) {
-            if (v == prev)
-                continue;
-            if (to == v) {
-                vpos[v] = vpos[u] + 1;
-                vroot[v] = vroot[u];
-                len += dfs2(v, u);
-            }
-            else {
-                vroot[v] = v;
-                vpos[v] = 0;
-                dfs2(v, u);
-            }
-        }
-        if (vroot[u] == u)
-            tree[u] = Tree(len);
-        return len;
-    }
-
-    void init(int n) {
-        timer = 0;
-        h[ROOT] = 0;
-        dfs1(ROOT, ROOT);
-        forn (d, maxd - 1)
-            forn (i, n)
-                p[d + 1][i] = p[d][p[d][i]];
-        vroot[ROOT] = ROOT;
-        vpos[ROOT] = 0;
-        dfs2(ROOT, ROOT);
-        //WARNING: init all trees
-    }
-
-    bool isPrev(int u, int v) {
-        return in[u] <= in[v] && out[v] <= out[u];
-    }
-
-    int lca(int u, int v) {
-        for (int d = maxd - 1; d >= 0; --d)
-            if (!isPrev(p[d][u], v))
-                u = p[d][u];
-        if (!isPrev(u, v))
-            u = p[0][u];
-        return u;
-    }
-
-    //for each v: h[v] >= toh
-    int getv(int u, int toh) {
+    int get(int l, int r) {
+        --r;
+        l += sz;
+        r += sz;
         int res = 0;
-        while (h[u] >= toh) {
-            int rt = vroot[u];
-            int l = max(0, toh - h[rt]), r = vpos[u] + 1;
-            res = max(res, tree[rt].get(l, r));
-            if (rt == ROOT)
-                break;
-            u = p[0][rt];
+        while (l < r) {
+            if (l%2 == 1) res = max(res, rmq[l]);
+            if (r%2 == 0) res = max(res, rmq[r]);
+            l = (l+1)/2;
+            r = (r-1)/2;
         }
+        if (l == r) res = max(res, rmq[l]);
         return res;
     }
-
-    int get(int u, int v) {
-        int w = lca(u, v);
-        return max(getv(u, h[w]), getv(v, h[w] + 1));
-    }
-
-    void put(int u, int val) {
-        int rt = vroot[u];
-        int pos = vpos[u];
-        tree[rt].put(pos, val);
-    }
 };
-//END_CODE
+
+// BEGIN_CODE
+int n;
+vi e[maxn];
+
+namespace HLD {
+int p[maxn], s[maxn], h[maxn], root[maxn];
+Rmq rmq[maxn];
+
+void dfs1(int v, int anc) {
+    s[v] = 1;
+    if (anc != -1) e[v].erase(find(all(e[v]), anc));
+    for (int to: e[v]) {
+        p[to] = v;
+        h[to] = h[v] + 1;
+        dfs1(to, v);
+        s[v] += s[to];
+    }
+}
+
+void dfs2(int v, int rt) {
+    root[v] = rt;
+    if (e[v].empty()) {
+        rmq[rt] = Rmq(h[v] - h[rt] + 1);
+        return;
+    }
+    int mxv = e[v][0];
+    for (int to: e[v]) {
+        if (s[to] > s[mxv]) mxv = to;
+    }
+    for (int to: e[v]) {
+        dfs2(to, to == mxv ? rt : to);
+    }
+}
+
+int get(int u, int v) {
+    int res = 0;
+    int t;
+    while (root[u] != root[v]) {
+        if (h[root[u]] > h[root[v]]) {
+            t = rmq[root[u]].get(0, h[u] - h[root[u]] + 1);
+            u = p[root[u]];
+        } else {
+            t = rmq[root[v]].get(0, h[v] - h[root[v]] + 1);
+            v = p[root[v]];
+        }
+        res = max(res, t);
+    }
+    int r = root[u];
+    if (h[u] > h[v]) {
+        t = rmq[r].get(h[v] - h[r], h[u] - h[r] + 1);
+    } else {
+        t = rmq[r].get(h[u] - h[r], h[v] - h[r] + 1);
+    }
+    return max(res, t);
+}
+
+void put(int v, int x) {
+    rmq[root[v]].put(h[v] - h[root[v]], x);
+}
+
+void init() {
+    const int ROOT = 0;
+    h[0] = 0;
+    dfs1(ROOT, -1);
+    dfs2(ROOT, ROOT);
+}
+} // namespace HLD
+// END_CODE
+
+void scan() {
+    cin >> n;
+    forn(i, n-1) {
+        int u, v;
+        cin >> u >> v;
+        e[--u].pb(--v);
+        e[v].pb(u);
+    }
+}
+
 
 void solve() {
-    int n;
-    cin >> n;
-    forn (i, n)
-        g[i].clear();
-    forn (i, n - 1) {
-        int u, v;
-        scanf("%d%d", &u, &v);
-        --u, --v;
-        g[u].push_back(v);
-        g[v].push_back(u);
-    }
-    HLD::init(n);
     int q;
     cin >> q;
-    forn (i, q) {
-        char type;
-        int u, v;
-        cin >> type >> u >> v;
-        if (type == 'I')
-            HLD::put(u - 1, v);
-        else
-            cout << HLD::get(u - 1, v - 1) << '\n';
+    forn(i, q) {
+        char c;
+        int x, y;
+        cin >> c >> x >> y;
+        if (c == 'I') {
+            HLD::put(x-1, y);
+        } else {
+            cout << HLD::get(x-1, y-1) << "\n";
+        }
     }
 }
 
 int main() {
-    #ifdef LOCAL
-    assert(freopen("hld.in", "r", stdin));
-    #else
-    #endif
+#ifdef LOCAL
+    freopen("input.txt", "r", stdin);
+#endif
+
+    ios::sync_with_stdio(false);
+
+    scan();
     solve();
+
+#ifdef LOCAL
+    cerr << "Time elapsed: " << clock() / 1000 << " ms" << endl;
+#endif
+    return 0;
 }
