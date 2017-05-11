@@ -1,194 +1,169 @@
+#define _GLIBCXX_DEBUG
+// Western Subregional 2015. D.
 #include <bits/stdc++.h>
 using namespace std;
 #define forn(i, n) for (int i = 0; i < (int)(n); ++i)
+#define fore(i, b, e) for (int i = (int)(b); i <= (int)(e); ++i)
+#define ford(i, n) for (int i = (int)(n) - 1; i >= 0; --i)
+#define pb push_back
+#define fi first
+#define se second
 #define all(x) (x).begin(), (x).end()
-const int inf = 1e9+100500;
 typedef vector<int> vi;
-
-// max width team notebook allows -----------------------------------
+typedef pair<int, int> pii;
+typedef long long i64;
+typedef unsigned long long u64;
+typedef long double ld;
+typedef long long ll;
 
 // BEGIN_CODE
-// WARNING: this code wasn't submitted anywhere
-
-namespace TwoChinese {
-
 struct Edge {
-    int to, w, id;
+    int v, to, id, w;
     bool operator<(const Edge& other) const {
-        return to < other.to || (to == other.to && w < other.w);
+        return w < other.w;
     }
 };
-typedef vector<vector<Edge>> Graph;
 
-const int maxn = 2050;
+typedef pair<multiset<Edge>*, int> Set;
+// real value: x - Set.se
 
-// global, for supplementary algorithms
+Set merge(Set a, Set b) {
+    if (a.fi == NULL) return b;
+    if (b.fi->size() > a.fi->size()) swap(a, b);
+
+    for (Edge e: *b.fi) {
+        a.fi->insert(Edge{e.v, e.to, e.id, e.w - b.se + a.se});
+    }
+    return a;
+}
+
+
+Edge take(Set& set) {
+    assert(!set.fi->empty());
+    auto e = *set.fi->begin();
+    set.fi->erase(set.fi->begin());
+    assert(e.w >= set.se);
+    e.w -= set.se;
+    set.se += e.w;
+    return e;
+}
+
+const int maxn = 200500;
+
+int n;
+int p[maxn];
+int get(int x) { return x == p[x] ? x : (p[x] = get(p[x])); }
+
+Set out[maxn]; // outgoing edges from v, endpoints swapped
 int b[maxn];
-int tin[maxn], tup[maxn];
-int dtime; // counter for tin, tout
-vector<int> st;
-int nc; // number of strongly connected components
-int q[maxn];
+int top[maxn];
+int done[maxn];
+int nc;
+int root;
+vector<int> edges;
+vi cycle[maxn];
+vi st;
+i64 res;
+Edge in[maxn];
 
-int answer;
-
-void tarjan(int v, const Graph& e, vector<int>& comp) {
-    b[v] = 1;
-    st.push_back(v);
-    tin[v] = tup[v] = dtime++;
-
-    for (Edge t: e[v]) if (t.w == 0) {
-        int to = t.to;
-        if (b[to] == 0) {
-            tarjan(to, e, comp);
-            tup[v] = min(tup[v], tup[to]);
-        } else if (b[to] == 1) {
-            tup[v] = min(tup[v], tin[to]);
+void restore(Edge e) {
+    edges.push_back(e.id);
+//     cerr << "answer " << e.to << " " << e.v << "\n";
+    int v = e.v;
+    int prev = v;
+    while (v != -1) {
+        done[v] = true;
+        if (v >= n) {
+            for (int x: cycle[v]) {
+                if (x != prev) {
+                    top[x] = -1;
+                    restore(in[x]);
+                }
+            }
         }
-    }
-
-    if (tin[v] == tup[v]) {
-        while (true) {
-            int t = st.back();
-            st.pop_back();
-            comp[t] = nc;
-            b[t] = 2;
-            if (t == v) break;
-        }
-        ++nc;
+        prev = v;
+        v = top[v];
     }
 }
 
-vector<Edge> bfs(
-    const Graph& e,const vi& init, const vi& comp)
-{
-    int n = e.size();
-    forn(i, n) b[i] = 0;
-    int lq = 0, rq = 0;
-    for (int v: init) b[v] = 1, q[rq++] = v;
-
-    vector<Edge> result;
-
-    while (lq != rq) {
-        int v = q[lq++];
-        for (Edge t: e[v]) if (t.w == 0) {
-            int to = t.to;
-            if (b[to]) continue;
-            if (!comp.empty() && comp[v] != comp[to]) continue;
-            b[to] = 1;
-            q[rq++] = to;
-            result.push_back(t);
+void solve() {
+    forn(i, n*2) p[i] = i, top[i] = -1;
+    nc = n;
+    root = 0;
+    done[root] = true;
+    forn(start, n) if (!b[start]) {
+        st = {start};
+        b[start] = 1;
+        while (!done[st[0]]) {
+            int v = st.back();
+            b[v] = 1;
+            if (done[v]) {
+                assert(st.size() >= 2);
+                st.pop_back();
+                assert(!done[st.back()]);
+                restore(in[st.back()]);
+                assert(done[st.back()]);
+                continue;
+            }
+            assert(!out[v].fi->empty());
+            auto e = take(out[v]);
+            in[v] = e;
+            res += e.w;
+            int to = get(e.to);
+            if (to == v) continue;
+            if (b[to] && !done[to]) {
+                while (true) {
+                    int u = st.back();
+                    st.pop_back();
+                    top[u] = nc;
+                    p[get(u)] = nc;
+                    out[nc] = merge(out[nc], out[u]);
+                    cycle[nc].push_back(u);
+                    if (u == to) break;
+                }
+                st.push_back(nc);
+                b[nc] = 1;
+                ++nc;
+            } else {
+                st.push_back(to);
+            }
         }
     }
-
-    return result;
+    forn(i, n) assert(done[i]);
+    assert((int)edges.size() == n-1);
+    cout << res << endl;
+    return;
+    sort(all(edges));
+    cout << n-1 << "\n";
+    forn(i, n-1) cout << edges[i]+1 << " \n"[i+1 == n-1];
 }
-
-// warning: check that each vertex is reachable from root
-vector<Edge> run(Graph e, int root) {
-    int n = e.size();
-
-    // find minimum incoming weight for each vertex
-    vector<int> minw(n, inf);
-    forn(v, n) for (Edge t: e[v]) {
-        minw[t.to] = min(minw[t.to], t.w);
-    }
-    forn(v, n) for (Edge &t: e[v]) if (t.to != root) {
-        t.w -= minw[t.to];
-    }
-    forn(i, n) if (i != root) answer += minw[i];
-
-    // check if each vertex is reachable from root by zero edges
-    vector<Edge> firstResult = bfs(e, {root}, {});
-    if ((int)firstResult.size() + 1 == n) {
-        return firstResult;
-    }
-
-    // find stongly connected comp-s and build compressed graph
-    vector<int> comp(n);
-    forn(i, n) b[i] = 0;
-    nc = 0;
-    dtime = 0;
-    forn(i, n) if (!b[i]) tarjan(i, e, comp);
-
-    // multiple edges may be removed here if needed
-    Graph ne(nc);
-    forn(v, n) for (Edge t: e[v]) {
-        if (comp[v] != comp[t.to]) {
-            ne[comp[v]].push_back({comp[t.to], t.w, t.id});
-        }
-    }
-    int oldnc = nc;
-
-    // run recursively on compressed graph
-    vector<Edge> subres = run(ne, comp[root]);
-
-    // find incoming edge id for each component, init queue
-    // if there is an edge (u, v) between different components
-    // than v is added to queue
-    nc = oldnc;
-    vector<int> incomingId(nc);
-    for (Edge e: subres) {
-        incomingId[e.to] = e.id;
-    }
-
-    vector<Edge> result;
-    vector<int> init;
-    init.push_back(root);
-    forn(v, n) for (Edge t: e[v]) {
-        if (incomingId[comp[t.to]] == t.id) {
-            result.push_back(t);
-            init.push_back(t.to);
-        }
-    }
-
-    // run bfs to add edges inside components and return answer
-    vector<Edge> innerEdges = bfs(e, init, comp);
-    result.insert(result.end(), all(innerEdges));
-
-    assert((int)result.size() + 1 == n);
-    return result;
-}
-
-} // namespace TwoChinese
-
-void test () {
-    auto res = TwoChinese::run({
-        {{1,5,0},{2,5,1}},
-        {{3,1,2}},
-        {{1,2,3},{4,1,4}},
-        {{1,1,5},{4,2,6}},
-        {{2,1,7}}},
-        0);
-    cout << TwoChinese::answer << endl;
-    for (auto e: res) cout << e.id << " ";
-    cout << endl;
-    // 9     0 6 2 7
-}
-
 // END_CODE
 
-int main() {
-    test();
-    return 0;
-    freopen("input.txt", "r", stdin);
-    int n, m;
-    cin >> n >> m;
-    TwoChinese::Graph e(n);
-    vector<int> from(m), to(m), w(m);
+void scan() {
+    int m;
+    scanf("%d%d", &n, &m);
+    forn(i, n) out[i].fi = new multiset<Edge>();
     forn(i, m) {
-        int u, v, ww;
-        cin >> u >> v >> ww;
-        e[u].push_back({v, ww, i});
-        from[i] = u; to[i] = v; w[i] = ww;
+        int u, v, w;
+        scanf("%d%d%d", &u, &v, &w);
+        --u, --v;
+        out[v].fi->insert(Edge{v, u, i, w});
     }
+}
 
-    auto res = TwoChinese::run(e, 0);
-    cout << TwoChinese::answer << endl;
-    for (auto e: res) {
-        int i = e.id;
-        cout << from[i] << " -> " << to[i] << " (" << w[i] << ")" << endl;
-    }
+int main() {
+#ifdef LOCAL
+    freopen("input.txt", "r", stdin);
+#else
+//     freopen("delivery.in", "r", stdin);
+//     freopen("delivery.out", "w", stdout);
+#endif
 
+    scan();
+    solve();
+
+#ifdef LOCAL
+    cerr << "Time elapsed: " << clock() / 1000 << " ms" << endl;
+#endif
     return 0;
 }
