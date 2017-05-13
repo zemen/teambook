@@ -6,4 +6,3 @@
 - cool bases for miller-rabin
 - quaternions and basic 3d primitives
 - arc integral
-- fast oriented MST
