@@ -1,81 +1,79 @@
 #include <bits/stdc++.h>
 using namespace std;
 #define sz(x) ((int) (x).size())
+#define all(x) (x).begin(), (x).end()
 typedef long long ll;
+typedef long long i64;
+typedef long double ld;
+const int inf = int(1e9) + int(1e5);
+const ll infl = ll(2e18) + ll(1e10);
 
-const int mod = 7340033;
-const int root = 2187;
+#include "fft.cpp"
 
-void fft(int *a, int n, bool rev);
-
-int mul(ll a, ll b) {
-    return a * b % mod;
-}
-
-int sub(int a, int b) {
-    return (a + mod - b) % mod;
-}
-
-int sum(int a, int b) {
-    return (a + b) % mod;
-}
-
-int binpow(int a, int deg) {
-    int res = 1;
-    while (deg) {
-        if (deg % 2)
-            res = mul(res, a);
-        deg /= 2;
-        a = mul(a, a);
-    }
-    return res;
-}
 
 //BEGIN_CODE
-vector <int> mul(vector <int> a, vector <int> b, 
-        bool carry = true) {
-    int n = sz(a);
-    if (carry) {
-        a.resize(n * 2);
-        b.resize(n * 2);
-    }
-    fft(a.data(), a.size(), false);
-    fft(b.data(), b.size(), false);
-    for (int i = 0; i < sz(a); ++i)
-        a[i] = mul(a[i], b[i]);
-    fft(a.data(), a.size(), true);
-    a.resize(n);
-    return a;
-}
+const int M = 1 << LG;
+//check: a[0] not zero, lg < LG
+//check: to is of length (1 << (lg + 1))
+base c[M], d[M], e[M];
+void fft_inv(base *a, base *to, int lg) {
+    base r0 = base(1) / a[0];
+    for (int i = 0; i < (1 << lg); ++i)
+        a[i] *= r0;
+    fill(to, to + (1 << lg), 0);
+    to[0] = 1;
 
-vector <int> inv(vector <int> v) {
-    int n = 1;
-    while (n < sz(v))
-        n <<= 1;
-    v.resize(n, 0);
-    vector <int> res(1, binpow(v[0], mod - 2));
-    for (int k = 1; k < n; k <<= 1) {
-        vector <int> A(k * 2, 0);
-        copy(v.begin(), v.begin() + k, A.begin());
-        vector <int> C = res;
-        C.resize(k * 2, 0);
-        A = mul(A, C, false);
-        for (int i = 0; i < 2 * k; ++i)
-            A[i] = sub(0, A[i]);
-        A[0] = sum(A[0], 1);
-        for (int i = 0; i < k; ++i)
-            assert(A[i] == 0);
-        copy(A.begin() + k, A.end(), A.begin());
-        A.resize(k);
-        vector <int> B(k);
-        copy(v.begin() + k, v.begin() + 2 * k, B.begin());
-        C.resize(k);
-        B = mul(B, C);
-        for (int i = 0; i < k; ++i)
-            A[i] = sub(A[i], B[i]);
-        A = mul(A, C);
-        res.resize(k * 2);
-        copy(A.begin(), A.end(), res.begin() + k);
+    for (int i = 1; i <= lg; ++i) {
+        int n = 1 << i;
+        int n2 = 1 << (i + 1);
+        int hn = 1 << (i - 1);
+
+        fill(c, c + n2, 0);
+        fill(d, d + n2, 0);
+        fill(e, e + n2, 0);
+
+        copy(a, a + n, c);
+        fft(c, i + 1, false);
+
+        copy(to, to + hn, d);
+        fft(d, i + 1, false);
+
+        for (int i = 0; i < n2; ++i)
+            e[i] = c[i] * d[i];
+        fft(e, i + 1, true);
+
+        //cerr << "i = " << i << endl;
+        //assert(abs(e[0] - base(1)) < 1e-9);
+        //for (int i = 1; i < hn; ++i)
+            //assert(abs(e[i]) < 1e-9);
+
+        for (int i = 0; i < hn; ++i) {
+            e[i] = -e[i + hn];
+            e[i + hn] = 0;
+        }
+        for (int i = n; i < n2; ++i)
+            e[i] = 0;
+
+        fft(e, i, false);
+        for (int i = 0; i < n; ++i)
+            e[i] *= d[2 * i];
+        fft(e, i, true);
+        for (int i = 0; i < hn; ++i)
+            to[i + hn] = e[i];
+
     }
-    return res;
+    for (int i = 0; i < (1 << lg); ++i)
+        to[i] *= r0;
+}
+//END_CODE
+
+int main() {
+    vector<base> a{1, 0, 1, 0, 0, 0, 0, 0};
+    vector<base> b(16);
+
+    init_fft();
+    fft_inv(a.data(), b.data(), 3);
+    forn (i, 16)
+        cerr << roundl(b[i].real()) << ' ';
+    cerr << '\n';
 }

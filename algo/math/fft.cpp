@@ -76,6 +76,3 @@ void test() {
 }
 //END_CODE
 
-int main() {
-    test();
-}

@@ -11,15 +11,16 @@ namespace TwoSAT {
     vector<int> gr[maxn];
     int comp[maxn];
     int res[maxn];
+    vector<int> ord;
 
+    //u*2 - true, u*2+1 - false
     void addEdge(int u, int v) { //u or v
-        g[u].push_back(v ^ 1);
-        g[v].push_back(u ^ 1);
-        gr[u ^ 1].push_back(v);
-        gr[v ^ 1].push_back(u);
+        g[u ^ 1].push_back(v);
+        g[v ^ 1].push_back(u);
+        gr[u].push_back(v ^ 1);
+        gr[v].push_back(u ^ 1);
     }
 
-    vector<int> ord;
     void dfs1(int u) {
         used[u] = true;
         for (int v: g[u]) {
@@ -30,29 +31,17 @@ namespace TwoSAT {
         ord.push_back(u);
     }
 
-    int COL = 0;
-    void dfs2(int u) {
+    void dfs2(int u, int cc) {
         used[u] = true;
-        comp[u] = COL;
+        comp[u] = cc;
         for (int v: gr[u]) {
             if (used[v])
                 continue;
-            dfs2(v);
-        }
-    }
-
-    void mark(int u) {
-        res[u / 2] = u % 2;
-        used[u] = true;
-        for (int v: g[u]) {
-            if (used[v])
-                continue;
-            mark(v);
+            dfs2(v, cc);
         }
     }
 
     bool run() {
-        fill(res, res + 2 * n, -1);
         fill(used, used + 2 * n, false);
         forn (i, 2 * n)
             if (!used[i])
@@ -60,31 +49,36 @@ namespace TwoSAT {
         reverse(ord.begin(), ord.end());
         assert((int) ord.size() == (2 * n));
         fill(used, used + 2 * n, false);
-        for (int u: ord) if (!used[u]) {
-            dfs2(u);
-            ++COL;
-        }
-        forn (i, n)
+        int cc = 0;
+        for (int u: ord)
+            if (!used[u])
+                dfs2(u, cc++);
+        forn (i, n) {
             if (comp[i * 2] == comp[i * 2 + 1])
                 return false;
-
-        reverse(ord.begin(), ord.end());
-        fill(used, used + 2 * n, false);
-        for (int u: ord) {
-            if (res[u / 2] != -1) {
-                continue;
-            }
-            mark(u);
+            if (comp[i * 2] < comp[i * 2 + 1])
+                res[i] = true;
+            else
+                res[i] = false;
         }
         return true;
+    }
+
+    void clear() {
+        ord.clear();
+        forn (i, 2 * n) {
+            g[i].clear();
+            gr[i].clear();
+            comp[i] = -1;
+        }
     }
 };
 
 int main() {
     TwoSAT::n = 2;
-    TwoSAT::addEdge(0, 2); //x or y
-    TwoSAT::addEdge(0, 3); //x or !y
-    TwoSAT::addEdge(3, 3); //!y or !y
+    TwoSAT::addEdge(1, 3); //x or y
+    TwoSAT::addEdge(1, 2); //x or !y
+    TwoSAT::addEdge(2, 2); //!y or !y
     assert(TwoSAT::run());
     cout << TwoSAT::res[0] << ' ' << TwoSAT::res[1] << '\n';
     //1 0
