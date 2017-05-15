@@ -3,6 +3,7 @@ using namespace std;
 const int maxn = 5000100;
 const int inf = 1e9 + 1e5;
 
+//BEGIN_CODE
 char buf[maxn];
 char *s = buf + 1;
 int to[maxn][2];
@@ -49,3 +50,4 @@ void build() {
     for (int i = 0; s[i]; ++i)
         add_char(i);
 }
+//END_CODE

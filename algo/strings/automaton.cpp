@@ -40,6 +40,7 @@ void addchar(int c) {
     }
     last = nlast;
 }
+// END_CODE
 
 bool check(const string& s) {
     int v = 1;
