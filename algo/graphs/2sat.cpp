@@ -13,7 +13,7 @@ namespace TwoSAT {
     int res[maxn];
     vector<int> ord;
 
-    //u*2 - true, u*2+1 - false
+    //u*2 - false, u*2+1 - true
     void addEdge(int u, int v) { //u or v
         g[u ^ 1].push_back(v);
         g[v ^ 1].push_back(u);
@@ -56,10 +56,7 @@ namespace TwoSAT {
         forn (i, n) {
             if (comp[i * 2] == comp[i * 2 + 1])
                 return false;
-            if (comp[i * 2] < comp[i * 2 + 1])
-                res[i] = true;
-            else
-                res[i] = false;
+            res[i] = comp[i * 2] < comp[i * 2 + 1];
         }
         return true;
     }
@@ -81,5 +78,5 @@ int main() {
     TwoSAT::addEdge(2, 2); //!y or !y
     assert(TwoSAT::run());
     cout << TwoSAT::res[0] << ' ' << TwoSAT::res[1] << '\n';
-    //1 0
+    //1 0, x=true, y=false
 }
