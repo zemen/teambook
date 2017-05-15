@@ -57,3 +57,25 @@ print(F(123)) # 123
 print(F('-.125')) # -1/8
 print(F(pi).limit_denominator(30)) # 22/7
 print(F(1, 2) ** 31) # 1/2147483648
+
+""" Datetime """
+
+from datetime import datetime as dt, timedelta as delta
+d = dt(2017, 5, 15) # May 15, 2017, Monday
+print(d.year, d.month, d.day, d.isoweekday())   # 2017 5 15 1
+print(dt.fromordinal(d.toordinal() + 5))        # 2017-05-20
+print(d + delta(5))                             # 2017-05-20
+print(d + delta(5, 3600))               # 2017-05-20 01:00:00
+print(d.replace(year=2018))                     # 2018-05-15
+
+# only for years 1970 - 2038
+timestamp = (d - dt(1970, 1, 1)) / delta(seconds=1)
+print(timestamp)
+print(dt.utcfromtimestamp(timestamp))
+print(d.timetuple())
+
+import calendar as cal
+print(cal.isleap(2016)) # True
+print(cal.leapdays(2000, 2016)) # 4 (leap years in [l, r))
+print(cal.weekday(2017, 5, 15) + 1) # 1, Monday
+print(cal.monthrange(2016, 2)) # (0, 29), 0 is for Monday
