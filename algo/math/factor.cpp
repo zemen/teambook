@@ -67,6 +67,9 @@ bool isPrime(ll n) {
         return false;
     if (n % 2 == 0)
         return n == 2;
+    // < 2^32: 2, 7, 61
+    // < 3e18: 2, 3, 5, 7, 11, 13, 17, 19, 23
+    // < 2^64: 2, 325, 9375, 28178, 450775, 9780504, 1795265022
     for (ll a = 2; a < min<ll>(8, n); ++a)
         if (!millerRabinTest(n, a))
             return false;

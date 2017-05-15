@@ -1,7 +1,5 @@
 """ Decimal """
-from decimal import Decimal as D
-from decimal import getcontext
-from decimal import FloatOperation
+from decimal import Decimal as D, getcontext, FloatOperation
 from decimal import ROUND_DOWN
 getcontext().prec = 50
 getcontext().traps[FloatOperation] = True
@@ -39,22 +37,7 @@ def cos(x):
     For larger values, first compute x = x % (2 * pi). """
     getcontext().prec += 2
     i, lasts, s, fact, num, sign = 0, 0, 1, 1, 1, 1
-    while s != lasts:
-        lasts = s
-        i += 2
-        fact *= i * (i-1)
-        num *= x * x
-        sign *= -1
-        s += num / fact * sign
-    getcontext().prec -= 2
-    return +s
-
-def sin(x):
-    """Return the sine of x as measured in radians.
-    The Taylor series approximation works best for a small x.
-    For larger values, first compute x = x % (2 * pi). """
-    getcontext().prec += 2
-    i, lasts, s, fact, num, sign = 1, 0, x, 1, x, 1
+    # sin: i, lasts, s, fact, num, sign = 1, 0, x, 1, x, 1
     while s != lasts:
         lasts = s
         i += 2

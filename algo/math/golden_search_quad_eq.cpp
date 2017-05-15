@@ -35,3 +35,25 @@ ld goldenSearch(ld l, ld r) {
 int main() {
     std::cout << goldenSearch(-100, 100) << '\n';
 }
+
+vector<ld> sqrRoots(ld a, ld b, ld c) {
+    ld d = b * b - 4 * a * c;
+    if (ze(d))
+        return {-b / (2 * a)};
+    if (d < 0)
+        return {};
+    d = sqrtl(d);
+    if (ze(b)) {
+        ld x1 = -d / (2 * a);
+        ld x2 = d / (2 * a);
+        if (x1 > x2)
+            swap(x1, x2);
+        return {x1, x2};
+    }
+    ld sgn = b > 0 ? 1 : -1;
+    ld x1 = (-b - sgn * d) / (2 * a);
+    ld x2 = c / (a * x1);
+    if (x1 > x2)
+        swap(x1, x2);
+    return {x1, x2};
+}

@@ -1,3 +1,4 @@
+// NO_TEAMBOOK
 //https://en.wikipedia.org/wiki/Loss_of_significance
 
 #include <bits/stdc++.h>

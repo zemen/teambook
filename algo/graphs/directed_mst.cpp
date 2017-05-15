@@ -23,23 +23,16 @@ struct Edge {
         return w < other.w;
     }
 };
-
-typedef pair<multiset<Edge>*, int> Set;
-// real value: x - Set.se
-
+typedef pair<multiset<Edge>*, int> Set; // real value: x-Set.se
 Set merge(Set a, Set b) {
     if (a.fi == NULL) return b;
     if (b.fi->size() > a.fi->size()) swap(a, b);
-
     for (Edge e: *b.fi) {
         a.fi->insert(Edge{e.v, e.to, e.id, e.w - b.se + a.se});
     }
     return a;
 }
-
-
 Edge take(Set& set) {
-    assert(!set.fi->empty());
     auto e = *set.fi->begin();
     set.fi->erase(set.fi->begin());
     assert(e.w >= set.se);
@@ -48,16 +41,14 @@ Edge take(Set& set) {
     return e;
 }
 
-const int maxn = 200500;
+const int maxn = 200500; // must be >= n*2
 
 int n;
 int p[maxn];
 int get(int x) { return x == p[x] ? x : (p[x] = get(p[x])); }
 
 Set out[maxn]; // outgoing edges from v, endpoints swapped
-int b[maxn];
-int top[maxn];
-int done[maxn];
+int b[maxn], top[maxn], done[maxn];
 int nc;
 int root;
 vector<int> edges;
@@ -68,7 +59,6 @@ Edge in[maxn];
 
 void restore(Edge e) {
     edges.push_back(e.id);
-//     cerr << "answer " << e.to << " " << e.v << "\n";
     int v = e.v;
     int prev = v;
     while (v != -1) {
@@ -132,12 +122,7 @@ void solve() {
     forn(i, n) assert(done[i]);
     assert((int)edges.size() == n-1);
     cout << res << endl;
-    return;
-    sort(all(edges));
-    cout << n-1 << "\n";
-    forn(i, n-1) cout << edges[i]+1 << " \n"[i+1 == n-1];
 }
-// END_CODE
 
 void scan() {
     int m;
@@ -150,6 +135,7 @@ void scan() {
         out[v].fi->insert(Edge{v, u, i, w});
     }
 }
+// END_CODE
 
 int main() {
 #ifdef LOCAL
