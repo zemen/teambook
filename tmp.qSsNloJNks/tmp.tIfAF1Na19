@@ -1,0 +1,91 @@
+int m, n; // segs, points
+pair<pt, pt> segs[maxn];
+pt p[maxn], from, to;
+map<pt, int> shr;
+vi e[maxn]; // points adjacent to point
+int getPoint(pt x) {
+    if (shr.count(x)) return shr[x];
+    p[n] = x;
+    return shr[x] = n++;
+}
+// segIntersection: {bool, point}, true iff exactly one point
+void genIntersections() {
+    forn(i, m) {
+        getPoint(segs[i].fi);
+        getPoint(segs[i].se);
+        forn(j, i) {
+            auto t = segmentsIntersection(
+                segs[i].fi, segs[i].se, segs[j].fi, segs[j].se);
+            if (t.fi) getPoint(t.se);
+        }
+    }
+}
+
+void genGraph() {
+    forn(i, m) {
+        vi pts;
+        forn(j, n) if (pointInsideSegment(
+                    p[j], segs[i].fi, segs[i].se)) {
+            pts.push_back(j);
+        }
+        sort(all(pts), [](int i, int j) {
+            return p[i] < p[j]; });
+        forn(j, pts.size() - 1) {
+            int u = pts[j], v = pts[j+1];
+            e[u].push_back(v);
+            e[v].push_back(u);
+        }
+    }
+    forn(i, n) {
+        sort(all(e[i]), [i](int x, int y) {
+            pt a = p[x] - p[i];
+            pt b = p[y] - p[i];
+            if (a.right() != b.right()) return a.right();
+            return a % b > 0;
+        });
+    }
+}
+
+vector<pt> faces[maxn];
+bool inner[maxn];
+int nf;
+map<pii, int> faceForEdge;
+vi ef[maxn]; // graph on faces
+
+void genFaces() {
+    forn(i, n) for (int to: e[i]) {
+        if (faceForEdge.count({i, to})) continue;
+        int f = nf++;
+        int v = i, u = to;
+        do {
+            faces[f].push_back(p[v]);
+            faceForEdge[{v, u}] = f;
+            auto it = lower_bound(all(e[u]), v,
+                [u] (int x, int y) {
+                    pt a = p[x] - p[u];
+                    pt b = p[y] - p[u];
+                    if (a.right()!=b.right()) return a.right();
+                    return a % b > 0;
+            });
+            assert(*it == v);
+            if (it == e[u].begin()) it = e[u].end();
+            v = u;
+            u = *--it;
+        } while (v != i || u != to);
+    }
+    forn(i, nf) {
+        ld s = 0;
+        forn(j, faces[i].size()) {
+            s += faces[i][j] % faces[i][(j+1)%faces[i].size()];
+        }
+        inner[i] = gt(s, 0);
+    }
+    forn(v, n) for (int to: e[v]) {
+        int f1 = faceForEdge[{v, to}];
+        int f2 = faceForEdge[{to, v}];
+        if (f1 != f2) {
+            ef[f1].push_back(f2);
+            ef[f2].push_back(f1);
+        }
+    }
+}

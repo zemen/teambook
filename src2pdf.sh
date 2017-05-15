@@ -51,7 +51,6 @@ pictures() {
     for paper in misc/*.ps; do
         cat << EOF
 \twocolumn[
-\section{Сеточка}
 \includegraphics{$paper}
 ]
 EOF

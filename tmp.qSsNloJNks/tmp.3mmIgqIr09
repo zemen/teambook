@@ -1,0 +1,68 @@
+struct Plane {
+    pt v;
+    ld c;
+
+    Plane(pt a, pt b, pt c) {
+        v = ((b - a) % (c - a)).norm();
+        this->c = a * v;
+    }
+
+    ld dist(pt p) {
+        return p * v - c;
+    }
+};
+
+pt projection(pt p, pt a, pt b) {
+    pt v = b - a;
+    if (ze(v.abs2())) {
+        //stub: bad line
+        return a;
+    }
+    return a + v * (((p - a) * v) / (v * v));
+}
+
+pair<pt, pt> planesIntersection(Plane a, Plane b) {
+    pt dir = a.v % b.v;
+    if (ze(dir.abs2())) {
+        //stub: parallel planes
+        return {pt{1e18, 1e18, 1e18}, pt{1e18, 1e18, 1e18}};
+    }
+    ld s = a.v * b.v;
+    pt v3 = b.v - a.v * s;
+    pt h = a.v * a.c + v3 * ((b.c - a.c * s) / (v3 * v3));
+    return {h, h + dir};
+}
+
+pair<pt, pt> commonPerpendicular(pt a, pt b, pt c, pt d) {
+    pt v = (b - a) % (d - c);
+    ld S = v.abs();
+    if (ze(S)) {
+        //stub: parallel lines
+        return {pt{1e18, 1e18, 1e18}, pt{1e18, 1e18, 1e18}};
+    }
+    v = v.norm();
+    pt sh = v * (v * c - v * a);
+    pt a2 = a + sh;
+    ld s1 = ((c - a2) % (d - a2)) * v;
+    pt p = a + (b - a) * (s1 / S);
+    return {p, p + sh};
+}
+
+/*
+Absolute error test
+testProjection: 1e1 -> -16.3
+testProjection: 1e3 -> -14.1
+testProjection: 1e4 -> -13.1
+testProjection: 1e5 -> -12.3
+testProjection: 1e6 -> -11.2
+testPlanesIntersection: 1e1 -> -11.5
+testPlanesIntersection: 1e3 -> -8.6
+testPlanesIntersection: 1e4 -> -8.3
+testPlanesIntersection: 1e5 -> -7.4
+testPlanesIntersection: 1e6 -> -6.5
+testCommonPerpendicular: 1e1 -> -13.5
+testCommonPerpendicular: 1e3 -> -11.4
+testCommonPerpendicular: 1e4 -> -10.5
+testCommonPerpendicular: 1e5 -> -8.7
+testCommonPerpendicular: 1e6 -> -8.6
+*/

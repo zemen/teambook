@@ -1,0 +1,91 @@
+vi inc[maxn][A];
+int lst[maxn], pos[maxn], part[maxn];
+int lp[maxn], rp[maxn], nrp[maxn];
+int upd[maxn], used[maxn], inq[maxn];
+vector<int> q;
+int dtime;
+int np; // number of classes
+vector<int> toRefine[A];
+
+void doSwap(int x, int y) {
+    swap(lst[pos[x]], lst[pos[y]]);
+    swap(pos[x], pos[y]);
+}
+
+void refine(const vi& a) {
+    ++dtime;
+    vector<int> updated;
+    for (int x: a) {
+        if (used[x] == dtime) continue;
+        used[x] = dtime;
+
+        int p = part[x];
+        if (upd[p] != dtime) {
+            upd[p] = dtime;
+            nrp[p] = rp[p];
+            updated.pb(p);
+        }
+
+        doSwap(x, lst[nrp[p]-1]);
+        --nrp[p];
+    }
+
+    for (int p: updated) {
+        if (lp[p] == nrp[p]) continue;
+        lp[np] = nrp[p];
+        rp[np] = rp[p];
+        rp[p] = nrp[p];
+        for (int i = lp[np]; i < rp[np]; ++i) {
+            part[lst[i]] = np;
+        }
+
+        if (inq[p] || rp[np] - lp[np] < rp[p] - lp[p]) {
+            inq[np] = 1;
+            q.push_back(np);
+        } else {
+            inq[p] = 1;
+            q.push_back(p);
+        }
+
+        ++np;
+    }
+}
+
+void solve() {
+    forn(i, n) lst[i] = i;
+    sort(lst, lst+n, [](int i, int j) {
+        return col[i] < col[j];
+    });
+
+    forn(i, n) {
+        if (i && col[lst[i]] != col[lst[i-1]]) {
+            rp[np] = i;
+            lp[++np] = i;
+        }
+        part[lst[i]] = np;
+        pos[lst[i]] = i;
+    }
+    rp[np++] = n;
+
+    forn(i, np) {
+        inq[i] = 1;
+        q.push_back(i);
+    }
+
+    forn(i, q.size()) {
+        int p = q[i];
+        inq[p] = false;
+        forn(c, A) {
+            toRefine[c].clear();
+            for (int id = lp[p]; id < rp[p]; ++id) {
+                toRefine[c].insert(
+                    toRefine[c].end(), all(inc[lst[id]][c]));
+            }
+        }
+        forn(c, A) if (!toRefine[c].empty()) {
+            refine(toRefine[c]);
+        }
+    }
+
+    forn(i, n) printf("%d\n", part[i] + 1);
+}
