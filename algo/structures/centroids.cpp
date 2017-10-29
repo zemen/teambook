@@ -11,7 +11,7 @@ vector<int> g[LG][maxn];
 int rt[LG][maxn];
 int from[LG][maxn];
 
-namespace Cenroids {
+namespace Centroids {
 
 int D;
 int cnt[maxn];
@@ -91,5 +91,5 @@ int main() {
         g[0][u].push_back(v);
         g[0][v].push_back(u);
     }
-    Cenroids::decompose(0);
+    Centroids::decompose(0);
 }
